@@ -16,6 +16,11 @@ class CreateUtilisateurRoleTable extends Migration
         Schema::create('utilisateur_role', function (Blueprint $table) {
             create_fk($table, "utilisateur");
             create_fk($table, "role");
+
+            $table->primary([
+                'id_utilisateur', 
+                'id_role'
+            ], 'utilisateur_role_pk');
         });
     }
 

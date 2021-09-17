@@ -16,6 +16,11 @@ class CreateRoleDroitTable extends Migration
         Schema::create('role_droit', function (Blueprint $table) {
             create_fk($table, "droit");
             create_fk($table, "role");
+
+            $table->primary([
+                'id_droit', 
+                'id_role'
+            ], 'role_droit_pk');
         });
     }
 
