@@ -25,6 +25,13 @@ class ExperienceProfessionnelleCreateRequest extends FormRequest
     {
         return [
             //
+            'entreprise' => 'required|max:255',
+            'intitule_poste' => 'required|max:255',
+            'date_debut' => 'required|date',
+            'date_fin' => 'required|date',
+            'description' => 'required',
+            'id_profil' => 'required|integer',
+            'id_type_contrat' => 'required|integer'
         ];
     }
 }

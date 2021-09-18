@@ -25,6 +25,10 @@ class AdresseUpdateRequest extends FormRequest
     {
         return [
             //
+            'pays' => 'required|max:255',
+            'ville' => 'required|max:255',
+            'rue' => 'nullable|max:255',
+            'zip' => 'nullable|max:255'
         ];
     }
 }

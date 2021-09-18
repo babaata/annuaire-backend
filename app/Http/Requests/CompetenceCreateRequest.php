@@ -25,6 +25,9 @@ class CompetenceCreateRequest extends FormRequest
     {
         return [
             //
+            'nom' => 'required|max:255',
+            'niveau' => 'required|max:255',
+            'id_profil' => 'required|max:11'
         ];
     }
 }
