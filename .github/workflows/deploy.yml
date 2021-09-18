@@ -18,6 +18,7 @@ jobs:
           script: |
             rm -rf annuaire-backend
             git clone git@github.com:babaata/annuaire-backend.git
-            cd annuaire-backend
-            docker-compose up -d --build
+            cp -r .env annuaire-backend/ && cd annuaire-backend
+            docker-compose up -d --build --force-recreate
+            docker-compose exec app php artisan migrate --force
             echo 'Deployment successful'
