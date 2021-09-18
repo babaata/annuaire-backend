@@ -1,71 +1,70 @@
-version: '2.0'
+version: "3.7"
 services:
-  #PHP Service
   app:
     build:
-      context: .
+      args:
+        user: diawara
+        uid: 1000
+      context: ./
       dockerfile: Dockerfile
-    image: annuaire-backend
-    container_name: app
+    image: babaata
+    container_name: babaata-app
     restart: unless-stopped
-    tty: true
-    environment:
-      SERVICE_NAME: app
-    working_dir: /var/www/html/
-    depends_on:
-      - db
-    networks:
-      - proxy_https_default
+    working_dir: /var/www/
     volumes:
-      - app:/var/www/html
-      - ./nginx-conf:/etc/nginx/conf.d
-    env_file:
-      - .env
- 
-  #Nginx Service
-  webserver:
-    build: ./nginx
-    ports:
-      - 1300:80
-    environment:
-      - VIRTUAL_HOST=${DOMAIN}
-      - VIRTUAL_PORT=80
-      - LETSENCRYPT_HOST=${DOMAIN}
-      - LETSENCRYPT_EMAIL=dev.harouna@gmail.com
-    container_name: webserver
-    restart: unless-stopped
-    tty: true
+      - ./:/var/www
     networks:
-      - proxy_https_default
-    depends_on:
-      - db
-    volumes:
-      - app:/var/www/html/
-    env_file:
-      - .env
-  #MySQL Service
+      - babaata
+
   db:
-    image: mysql:5.7.32
-    container_name: db
+    build:
+      args:
+        user: diawara
+        uid: 1000
+      context: ./docker-compose/mysql
+      dockerfile: Dockerfile
+    # image: postgres:10.1
+    image: mysql:5.7
+    container_name: babaata-db
     restart: unless-stopped
-    tty: true
-    ports:
-      - "3306:3360"
     environment:
+      # if mysql choosed
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      # DB_ROOT_PASS: ${DB_PASSWORD}
+      # if postgresql choosed
+      # POSTGRES_DB: ${DB_DATABASE}
+      # POSTGRES_PASSWORD: ${DB_PASSWORD}
+      # POSTGRES_USER: ${DB_USERNAME}
+      # POSTGRES_PORT: ${DB_PORT}
+      SERVICE_TAGS: dev
+      # SERVICE_NAME: postgres
       SERVICE_NAME: mysql
-    networks:
-      - proxy_https_default
     volumes:
-      - db:/var/lib/mysql
-    env_file:
-      - .env
- 
-volumes:
-  app:
-  db:
-#Docker Networks
+      # if postgresql choosed
+      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+      # if mysql choosed 
+      # - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+      # - 3306:3306
+    networks:
+      - babaata
+
+  nginx:
+    image: nginx:alpine
+    container_name: babaata-nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d
+    networks:
+      - babaata
+
 networks:
-  proxy_https_default:
-    external: true
+  babaata:
+    driver: bridge
