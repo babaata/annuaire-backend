@@ -77,7 +77,6 @@ class GestionProfil
 
 		return response()->json([
 			'status' => $status,
-			'id' => $status ? $profils->first()->id_profil:null,
 			'message' => $status ? "Profil supprimé avec succès":"Profil invalide"
 		]);
 	}
