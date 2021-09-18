@@ -25,6 +25,16 @@ class UtilisateurUpdateRequest extends FormRequest
     {
         return [
             //
+            'nom_utilisateur' => 'required|max:15',
+            'nom' => 'required|max:15',
+            'prenom' => 'required|max:25',
+            'date_de_naissance' => 'nullable|date',
+            'sexe' => 'required|max:20',
+            'email' => 'required|email',
+            'telephone' => 'nullable',
+            'statut' => 'nullable|boolean',
+            'url_photo' => 'nullable|max:255',
+            'password' => 'required|min:6|max:255'
         ];
     }
 }

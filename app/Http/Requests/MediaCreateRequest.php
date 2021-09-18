@@ -25,6 +25,12 @@ class MediaCreateRequest extends FormRequest
     {
         return [
             //
+            'nom' => 'required|max:255',
+            'description' => 'required',
+            'url' => 'required|url',
+            'id_experience_professionnelle' => 'nullable|integer|max:11',
+            'id_certification' => 'nullable|integer|max:11',
+            'id_education' => 'nullable|integer|max:11'
         ];
     }
 }
