@@ -25,6 +25,9 @@ class ProfilUpdateRequest extends FormRequest
     {
         return [
             //
+            'titre' => 'required|max:255',
+            'resume' => 'required',
+            'id_utilisateur' => 'required|integer|max:11'
         ];
     }
 }

@@ -25,6 +25,9 @@ class DroitCreateRequest extends FormRequest
     {
         return [
             //
+            'nom' => 'required|max:255',
+            'description' => 'nullable',
+            'statut' => 'nullable|boolean'
         ];
     }
 }
