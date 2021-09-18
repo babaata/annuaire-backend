@@ -22,6 +22,7 @@ Route::middleware(['auth:api'])->group(function (){
     Route::post('/profil', "ProfilController@store");
     Route::put('/profil/{profil}', "ProfilController@update");
     Route::delete('/profil/{profil}', "ProfilController@destroy");
+    Route::any('/refresh', "UtilisateurController@refresh");
     
 });
 
