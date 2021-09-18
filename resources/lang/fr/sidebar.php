@@ -1,0 +1,27 @@
+<?php
+return [
+    "Actualités" => "Actualités",
+    "Années scolaires" => "Années scolaires",
+    "Classes" => "Classes",
+    "Compositions" => "Compositions",
+    "Comptabilites" => "Comptabilites",
+    "Déconnexion" => "Déconnexion",
+    "EMAIL" => "EMAIL",
+    "Emplois" => "Emplois",
+    "Etat comptable" => "Etat comptable",
+    "Inscription" => "Inscription",
+    "Liste" => "Liste",
+    "Messagerie" => "Messagerie",
+    "Mon compte" => "Mon compte",
+    "Mon emploi" => "Mon emploi",
+    "Paiements" => "Paiements",
+    "Parametres" => "Parametres",
+    "Prise de photos" => "Prise de photos",
+    "Recherche" => "Recherche",
+    "SMS" => "SMS",
+    "Tableau de bord" => "Tableau de bord",
+    "Type de paiement" => "Type de paiement",
+    "Verrouiller" => "Verrouiller",
+    "Élèves" => "Élèves",
+    "Évaluations" => "Évaluations"
+];

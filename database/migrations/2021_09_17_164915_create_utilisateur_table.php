@@ -18,9 +18,9 @@ class CreateUtilisateurTable extends Migration
             $table->string('nom_utilisateur');
             $table->string('nom');
             $table->string('prenom');
-            $table->date('date_de_naissance');
-            $table->string('sexe');
-            $table->string('email')->unique();
+            $table->date('date_de_naissance')->nullable();
+            $table->string('sexe')->nullable();
+            $table->string('email');//;->unique();
             $table->string('telephone')->nullable();
             $table->dateTime('date_de_creation')->nullable();
             $table->dateTime('date_de_modification')->nullable();
@@ -28,6 +28,10 @@ class CreateUtilisateurTable extends Migration
             $table->dateTime('date_de_desactivation')->nullable();
             $table->string('url_photo')->nullable();
             $table->string('password');
+            $table->string('api_token', 80)
+                        ->unique()
+                        ->nullable()
+                        ->default(null);
         });
     }
 

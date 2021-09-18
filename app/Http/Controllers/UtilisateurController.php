@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\{UtilisateurCreateRequest, LoginRequest};
+use App\Gestions\{GestionUtilisateur};
 
 class UtilisateurController extends Controller
 {
@@ -32,9 +34,20 @@ class UtilisateurController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UtilisateurCreateRequest $request, GestionUtilisateur $gestion)
     {
-        //
+        return $gestion->store($request);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function login(LoginRequest $request, GestionUtilisateur $gestion)
+    {
+        return $gestion->login($request);
     }
 
     /**
