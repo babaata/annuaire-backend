@@ -25,6 +25,10 @@ class LangueCreateRequest extends FormRequest
     {
         return [
             //
+            'nom' => 'required|max:255',
+            'niveau' => 'nullable|max:255',
+            'slug' => 'nullable|max:255',
+            'id_profil' => 'required|integer'
         ];
     }
 }

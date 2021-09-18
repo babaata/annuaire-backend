@@ -25,6 +25,12 @@ class ReferentUpdateRequest extends FormRequest
     {
         return [
             //
+            'nom' => 'required|max:255',
+            'prenom' => 'required|max:255',
+            'poste' => 'required|max:255',
+            'email' => 'required|email',
+            'telephone' => 'nullable|max:255',
+            'id_experience_professionnelle' => 'required|integer|max:11'
         ];
     }
 }

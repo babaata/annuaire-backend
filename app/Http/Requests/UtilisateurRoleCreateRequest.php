@@ -25,6 +25,8 @@ class UtilisateurRoleCreateRequest extends FormRequest
     {
         return [
             //
+            'id_utilisateur' => 'required|integer|max:11',
+            'id_role' => 'required|integer|max:11'
         ];
     }
 }

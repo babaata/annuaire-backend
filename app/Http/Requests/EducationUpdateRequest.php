@@ -25,6 +25,13 @@ class EducationUpdateRequest extends FormRequest
     {
         return [
             //
+            'ecole' => 'required|max:255',
+            'type_diplome' => 'required|max:255',
+            'date_debut' => 'required|date',
+            'date_fin' => 'required|date',
+            'description' => 'required',
+            'id_adresse' => 'required|integer',
+            'id_profil' => 'required|integer'
         ];
     }
 }

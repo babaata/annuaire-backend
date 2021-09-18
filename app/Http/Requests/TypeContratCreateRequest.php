@@ -25,6 +25,8 @@ class TypeContratCreateRequest extends FormRequest
     {
         return [
             //
+            'nom' => 'required|max:255',
+            'slug' => 'nullable|max:255'
         ];
     }
 }
