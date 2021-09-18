@@ -10,57 +10,38 @@ use Illuminate\Support\Str;
 
 class GestionUtilisateur
 {
+	/** La methode de stockage */
 	
-	public function store($data)
+	public function store(Request $request)
+	{
+        $users = Utilisateur::create($request->all());
+
+		return response()->json($users,201);
+		
+	}
+
+	/** La methode de modification */
+
+	public function update(Request $request , Utilisateur $users)
 	{
 
-		$token = Str::random(60);
+        $users->update($request->all());
 
-		$user = Utilisateur::create([
-			'nom_utilisateur' => $data->user_name,
-			'nom' => $data->nom,
-			'prenom' => $data->prenom,
-			'email' => $data->email,
-			'telephone' => $data->telephone,
-			'date_de_creation' => now(),
-			'password' => Hash::make($data->password),
-			'api_token' => $token
-		]);
+		return response()->json($users,200);
 
-		return response()->json([
-			'status' => true,
-			'api_token' => $token,
-			'id' => $user->id_utilisateur,
-			'nom' => $user->nom,
-			'prenom' => $user->prenom,
-			'message' => trans("Inscription effectuée avec succès")
-		]);
 	}
 
-	public function login($data){
+	/** la methode delete */
 
-		$user = Utilisateur::whereNomUtilisateur($data->username);
+	public function delete(Utilisateur $users)
+	{
 
-		if ($user->exists()) {
-			$user = $user->first();
+        $users->delete($request->all());
 
-			$hashedPassword = $user->password;
+		return response()->json(null , 204);
 
-			if (Hash::check($data->password, $hashedPassword)) {
-
-		    	return response()->json([
-					'status' => true,
-					'api_token' => $user->api_token,
-					'message' => "Utilisateur authentifié",
-				]);
-			}
-		}
-
-
-		return response()->json([
-			'status' => false,
-			'message' => "identifiant ou mot de passe incorrect",
-		], 403);
 	}
+
+	
 }
  ?>
