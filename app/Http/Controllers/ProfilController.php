@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\{ProfilCreateRequest, LoginRequest, ProfilUpdateRequest};
 use App\Gestions\{GestionProfil};
+use App\Models\{Utilisateur, Profil};
 
 class ProfilController extends Controller
 {
@@ -13,9 +14,12 @@ class ProfilController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return response()->json([
+            'status' => true,
+            'profils' => $request->user()->profils
+        ]);
     }
 
     /**
@@ -45,9 +49,12 @@ class ProfilController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id = null)
     {
-        //
+        return response()->json([
+            'status' => true,
+            'profil' => $request->user()->profils()->find($id)
+        ]);
     }
 
     /**

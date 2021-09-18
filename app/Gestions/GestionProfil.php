@@ -9,17 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class GestionProfil
-{
-
-	public function get($data)
-	{
-		return response()->json([
-			'status' => true,
-			'profil' => Profil::find($data->id),
-			'message' => trans("Profil créé avec succès")
-		]);
-	}
-	
+{	
 	public function store($data)
 	{
 		$user = $data->user();
