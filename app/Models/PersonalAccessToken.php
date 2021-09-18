@@ -37,9 +37,9 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
 		'last_used_at'
 	];
 
-	protected $hidden = [
-		'token'
-	];
+	// protected $hidden = [
+	// 	'token'
+	// ];
 
 	protected $fillable = [
 		'tokenable_type',

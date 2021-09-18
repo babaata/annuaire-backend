@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\{ProfilCreateRequest, LoginRequest};
+use App\Gestions\{GestionProfil};
 
 class ProfilController extends Controller
 {
@@ -32,9 +34,9 @@ class ProfilController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProfilCreateRequest $request, GestionProfil $gestion)
     {
-        //
+        return $gestion->store($request);
     }
 
     /**
@@ -66,9 +68,9 @@ class ProfilController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProfilUpdateRequest $request, GestionProfil $gestion, $id = null)
     {
-        //
+        return $gestion->update($request, $id);
     }
 
     /**
@@ -77,8 +79,8 @@ class ProfilController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, GestionProfil $gestion, $id = null)
     {
-        //
+        return $gestion->delete($request, $id);
     }
 }
