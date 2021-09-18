@@ -27,7 +27,6 @@ class ProfilUpdateRequest extends FormRequest
             //
             'titre' => 'required|max:255',
             'resume' => 'required',
-            'id_utilisateur' => 'required|integer|max:11'
         ];
     }
 }

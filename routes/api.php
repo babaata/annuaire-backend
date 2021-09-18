@@ -15,9 +15,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth:api'])->group(function (){
-    Route::get('/test', function() {
-        return ["HHD"];
-    });
+    Route::apiResource('adresse', AdresseController::class);
+    
+    Route::get('/profils', "ProfilController@index");
+    Route::get('/profil/{profil}', "ProfilController@show");
+    Route::post('/profil', "ProfilController@store");
+    Route::put('/profil/{profil}', "ProfilController@update");
+    Route::delete('/profil/{profil}', "ProfilController@destroy");
+    
 });
 
 //Inscription d'un utilisateur standart
