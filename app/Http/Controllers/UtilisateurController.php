@@ -5,9 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\{UtilisateurCreateRequest, LoginRequest};
 use App\Gestions\{GestionUtilisateur};
+use App\Models\{Utilisateur, Profil};
 
 class UtilisateurController extends Controller
 {
+
+
+    public function refresh(Request $request)
+    {
+        return response()->json([
+            'status' => true,
+            'token' => $request->user()->refreshToken()
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      *

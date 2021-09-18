@@ -90,4 +90,13 @@ class Utilisateur extends Authenticatable
 	{
 		return $this->belongsToMany(Role::class, 'utilisateur_role', 'id_utilisateur', 'id_role');
 	}
+
+	public function refreshToken()
+	{
+		$token = Str::random(60);
+
+		$this->update(['api_token' => $token]);
+
+		return $token;
+	}
 }
