@@ -1,4 +1,4 @@
-version: '2.0'
+version: '3.7'
 services:
   #PHP Service
   app:
@@ -13,6 +13,8 @@ services:
       SERVICE_NAME: app
     working_dir: /var/www/html/
     depends_on:
+      - db
+    links:
       - db
     networks:
       - proxy_https_default
@@ -45,26 +47,29 @@ services:
       - .env
   #MySQL Service
   db:
-    image: mysql:5.7.32
+    image: mysql:8.0
     container_name: db
     restart: unless-stopped
     tty: true
     ports:
       - "3306:3360"
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
       SERVICE_NAME: mysql
     networks:
       - proxy_https_default
+    command: '--default-authentication-plugin=mysql_native_password'
     volumes:
-      - db:/var/lib/mysql
+      - db2:/var/lib/mysql4
     env_file:
       - .env
  
 volumes:
   app:
-  db:
+  db2:
 #Docker Networks
 networks:
   proxy_https_default:

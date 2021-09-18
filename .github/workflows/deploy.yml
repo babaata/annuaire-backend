@@ -20,4 +20,5 @@ jobs:
             git clone git@github.com:babaata/annuaire-backend.git
             cd annuaire-backend
             docker-compose up -d --build
+            docker-compose exec app php artisan migrate --force
             echo 'Deployment successful'

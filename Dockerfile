@@ -40,6 +40,8 @@ RUN composer install
 RUN composer dump-autoload
 
 RUN php artisan key:generate
+RUN php artisan conf:cache
+RUN php artisan route:cache
 # RUN php artisan jwt:secret
  
 # Assign permissions of the working directory to the www-data user
