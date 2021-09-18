@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::middleware(['auth:api'])->group(function (){
+    Route::get('/test', function() {
+        return ["HHD"];
+    });
+});
+
 //Inscription d'un utilisateur standart
 Route::post('/user/create', 'UtilisateurController@store');
 Route::post('/user/login', 'UtilisateurController@login');
