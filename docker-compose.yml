@@ -16,6 +16,9 @@ services:
       - db
     networks:
       - proxy_https_default
+    volumes:
+      - app:/var/www/html
+      - ./nginx-conf:/etc/nginx/conf.d
     env_file:
       - .env
  
@@ -36,6 +39,8 @@ services:
       - proxy_https_default
     depends_on:
       - db
+    volumes:
+      - app:/var/www/html/
     env_file:
       - .env
   #MySQL Service
@@ -52,9 +57,14 @@ services:
       SERVICE_NAME: mysql
     networks:
       - proxy_https_default
+    volumes:
+      - db:/var/lib/mysql
     env_file:
       - .env
  
+volumes:
+  app:
+  db:
 #Docker Networks
 networks:
   proxy_https_default:
