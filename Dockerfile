@@ -35,6 +35,12 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
  
 # Copy existing application directory contents to the working directory
 COPY . /var/www/html
+
+RUN composer install
+RUN composer dump-autoload
+
+RUN php artisan key:generate
+# RUN php artisan jwt:secret
  
 # Assign permissions of the working directory to the www-data user
 RUN chown -R www-data:www-data \
