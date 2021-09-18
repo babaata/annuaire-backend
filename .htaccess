@@ -1,0 +1,23 @@
+php_value post_max_size 30M
+php_value upload_max_filesize 30M
+
+AddType text/cache-manifest .appcache
+
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews
+    </IfModule>
+
+    RewriteEngine On
+
+    # Redirect All Requests To The Subfolder
+    RewriteRule ^ /public
+
+</IfModule>
+
+
+# Hide a specific file
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>

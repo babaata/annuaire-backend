@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Inscription d'un utilisateur standart
+Route::post('/user/create', 'UtilisateurController@store');
+Route::post('/user/login', 'UtilisateurController@login');
