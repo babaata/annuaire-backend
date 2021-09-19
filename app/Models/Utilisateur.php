@@ -83,17 +83,6 @@ class Utilisateur extends Authenticatable
 		'api_token'
 	];
 
-	public function getPhoto()
-    {
-        $file = Storage::path($this->url_photo);
-
-        if (file_exists($file)) {
-            return asset(Storage::url($this->url_photo));
-        }
-
-        return asset("assets/images/default.jpg");
-    }
-
 	public function profils()
 	{
 		return $this->hasMany(Profil::class, 'id_utilisateur');

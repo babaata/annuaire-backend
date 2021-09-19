@@ -12,6 +12,14 @@ use Illuminate\Support\Facades\Storage;
 class GestionUtilisateur
 {
 
+	public function lastProfil($limit = 10)
+	{
+		return response()->json([
+            "status" => true,
+            'users' => Utilisateur::orderBy('date_de_creation')->limit($limit)->get()
+        ]);
+	}
+
 	public function saveUserPicture($data)
 	{
 		$status = false;
@@ -22,14 +30,14 @@ class GestionUtilisateur
             $image = $data->image->store('public/users');
 
             $data->user()->update([
-            	'url_photo' => $image
+            	'url_photo' => asset(Storage::url($image))
             ]);
         }
 
         return response()->json([
             "status" => $status,
             "message" => $status ? trans("Image téléchargée avec succès"):"Image invalide",
-            "image" => $data->user()->getPhoto()
+            "image" => $data->user()->url_photo
         ]);
 	}
 	
@@ -52,6 +60,7 @@ class GestionUtilisateur
 		return response()->json([
 			'status' => true,
 			'api_token' => $token,
+			'access_token' => $user->createToken("access_token")->plainTextToken,
 			'id' => $user->id_utilisateur,
 			'nom' => $user->nom,
 			'prenom' => $user->prenom,
