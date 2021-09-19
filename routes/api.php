@@ -32,6 +32,21 @@ Route::middleware(['auth:api'])->group(function (){
     Route::delete('/education/{education}', "EducationController@destroy");
 
     Route::any('/refresh', "UtilisateurController@refresh");
+
+    /**
+     * Competences Endpoints
+     */
+
+    Route::get('/v1/competences', "CompetenceController@index");
+    Route::post('/v1/competence', "CompetenceController@store");
+    Route::get('/v1/competence/{competence}', "CompetenceController@show");
+    
+    Route::put('/v1/competence/{competence}', "CompetenceController@update");
+    Route::delete('/v1/competence/{competence}', "CompetenceController@destroy");
+
+    
+
+
     
 });
 
