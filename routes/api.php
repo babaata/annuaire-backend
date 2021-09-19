@@ -57,7 +57,7 @@ Route::post('/user/create', 'UtilisateurController@store');
 Route::post('/user/login', 'UtilisateurController@login');
 
 //Gestion publique de l'utilisateur
-Route::get('/users/last/{limit?}', 'UtilisateurController@lastProfil');
+Route::get('/users/{limit?}', 'UtilisateurController@lastProfil');
 
 //Get user by id
 Route::get('/user/{user}', 'UtilisateurController@getBydId');
