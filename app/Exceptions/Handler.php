@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -34,8 +36,37 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
+        // $this->renderable(function($exception, $request) {
+        //     // if ($exception instanceof ValidationException) {
+        //     //     return response()->json([
+        //     //         "message" => "Les données fournies sont invalides.",
+        //     //         'errors' => $exception->errors()
+        //     //     ]);
+        //     // } 
+        // });
+    }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof ValidationException) {
+            return response()->json([
+                "message" => "Les données fournies sont invalides.",
+                'errors' => $exception->errors()
+            ]);
+        }elseif ($exception instanceof NotFoundHttpException) {
+            return response()->json(["message" => "La ressource demandée n'est pas disponible"]);
+        }
+
+        return parent::render($request, $exception);
+    }
+
+    protected function unauthenticated($request, \Illuminate\Auth\AuthenticationException $exception)
+    {
+        if ($request->expectsJson()) {
+            return response()->json(['message' => 'Non authentifié']);
+        }
+
+        // return a plain 401 response even when not a json call
+        return response('Non authentifié');
     }
 }

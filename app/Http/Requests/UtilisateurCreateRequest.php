@@ -28,8 +28,7 @@ class UtilisateurCreateRequest extends FormRequest
             'prenom' => 'required|string|max:100|min:3',
             'telephone' => 'required',
             'email' => 'required|email|unique:utilisateur',
-            'username' => 'required|max:100',
-            //'username' => ['required', 'string', 'max:100', 'unique:utilisateur', 'regex:/^\S*$/u'],
+            'username' => ['required', 'string', 'max:100', 'unique:utilisateur,nom_utilisateur', 'regex:/^\S*$/u'],
             'password' => 'required|min:6',
         ];
     }
