@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\{CompetenceCreateRequest, CompetenceUpdateRequest};
+use App\Gestions\{GestionCompetence};
 
 class CompetenceController extends Controller
 {
@@ -11,9 +13,9 @@ class CompetenceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(GestionCompetence $gestion)
     {
-        //
+        return $gestion->all();
     }
 
     /**
@@ -32,9 +34,9 @@ class CompetenceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CompetenceCreateRequest $request, GestionCompetence $gestion)
     {
-        //
+        return $gestion->store($request);
     }
 
     /**
@@ -43,9 +45,9 @@ class CompetenceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(GestionCompetence $gestion, $id)
     {
-        //
+        return $gestion->find($id);
     }
 
     /**
@@ -66,9 +68,9 @@ class CompetenceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CompetenceUpdateRequest $request, GestionCompetence $gestion, $id)
     {
-        //
+        return $gestion->update($request, $id);
     }
 
     /**
@@ -77,8 +79,8 @@ class CompetenceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(GestionCompetence $gestion, $id)
     {
-        //
+        return $gestion->delete($id);
     }
 }
