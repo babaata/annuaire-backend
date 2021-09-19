@@ -17,11 +17,20 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:api'])->group(function (){
     Route::apiResource('adresse', AdresseController::class);
     
+    //endpoints profil
     Route::get('/profils', "ProfilController@index");
     Route::get('/profil/{profil}', "ProfilController@show");
     Route::post('/profil', "ProfilController@store");
     Route::put('/profil/{profil}', "ProfilController@update");
     Route::delete('/profil/{profil}', "ProfilController@destroy");
+
+    //endpoints
+    Route::get('/educations', "EducationController@index");
+    Route::get('/education/{education}', "EducationController@show");
+    Route::post('/education', "EducationController@store");
+    Route::put('/education/{education}', "EducationController@update");
+    Route::delete('/education/{education}', "EducationController@destroy");
+
     Route::any('/refresh', "UtilisateurController@refresh");
     
 });

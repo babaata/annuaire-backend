@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\{EducationCreateRequest, LoginRequest, EducationUpdateRequest};
+use App\Gestions\{GestionProfil, GestionEducation};
+use App\Models\{Utilisateur, Profil, Education};
 
 class EducationController extends Controller
 {
@@ -11,9 +14,18 @@ class EducationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+
+        $educations = Education::whereIn('id_profil', function ($query) use ($request){
+            $query->from('profil')->whereIdUtilisateur($request->user()->id_utilisateur)
+            ->select('id_profil')->get();
+        })->get();
+
+        return response()->json([
+            'status' => true,
+            'educations' => $educations
+        ]);
     }
 
     /**
@@ -32,9 +44,9 @@ class EducationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EducationCreateRequest $request, GestionEducation $gestion)
     {
-        //
+        return $gestion->store($request);
     }
 
     /**
@@ -43,9 +55,18 @@ class EducationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id = null)
     {
-        //
+
+        $education = Education::whereIn('id_profil', function ($query) use ($request){
+            $query->from('profil')->whereIdUtilisateur($request->user()->id_utilisateur)
+            ->select('id_profil')->get();
+        })->whereIdEducation($id)->get();
+
+        return response()->json([
+            'status' => true,
+            'educations' => $education
+        ]);
     }
 
     /**
@@ -66,9 +87,9 @@ class EducationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(EducationUpdateRequest $request, GestionEducation $gestion, $id = null)
     {
-        //
+        return $gestion->update($request, $id);
     }
 
     /**
@@ -77,8 +98,8 @@ class EducationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, GestionEducation $gestion, $id = null)
     {
-        //
+        return $gestion->delete($request, $id);
     }
 }
