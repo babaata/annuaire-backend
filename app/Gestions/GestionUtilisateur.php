@@ -30,11 +30,16 @@ class GestionUtilisateur
         ]);
 	}
 
-	public function lastProfil($limit = 10)
+	public function allUsers($limit = 10)
 	{
+		$users = Utilisateur::orderBy('date_de_creation')
+			->with('profils')
+			->limit($limit);
+
 		return response()->json([
             "status" => true,
-            'users' => Utilisateur::orderBy('date_de_creation')->limit($limit)->get()
+            'count' => $users->count(),
+            'users' => $users->get()
         ]);
 	}
 
