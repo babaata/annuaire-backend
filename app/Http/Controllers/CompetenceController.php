@@ -13,7 +13,7 @@ class CompetenceController extends Controller
      */
     public function index()
     {
-        //
+       
     }
 
     /**
@@ -34,7 +34,7 @@ class CompetenceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       
     }
 
     /**
@@ -45,7 +45,7 @@ class CompetenceController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
@@ -66,9 +66,9 @@ class CompetenceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request , $id)
     {
-        //
+        
     }
 
     /**
@@ -79,6 +79,6 @@ class CompetenceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
     }
 }

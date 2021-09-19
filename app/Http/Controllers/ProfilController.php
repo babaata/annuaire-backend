@@ -75,7 +75,7 @@ class ProfilController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProfilUpdateRequest $request, GestionProfil $gestion, $id = null)
+ public function update(ProfilUpdateRequest $request, GestionProfil $gestion, $id = null)
     {
         return $gestion->update($request, $id);
     }

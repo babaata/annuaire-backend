@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\{LangueCreateRequest,LangueUpdateRequest};
+use App\Gestions\{GestionLangue};
+use App\Models\{Langue, Profil};
 
 class LangueController extends Controller
 {
@@ -11,9 +14,12 @@ class LangueController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return response()->json([
+            'status' => true,
+            'langue' => $request->user()->langues
+        ]);
     }
 
     /**
@@ -32,9 +38,9 @@ class LangueController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(LangueCreateRequest $request , GestionLangue $gestionLang)
     {
-        //
+        return $gestionLang->store($request);
     }
 
     /**
@@ -43,9 +49,12 @@ class LangueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request,$id = null)
     {
-        //
+        return response()->json([
+            'status' => true,
+            'langue' => $request->user()->langues()->find($id)
+        ]);
     }
 
     /**
@@ -66,9 +75,9 @@ class LangueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(LangueUpdateRequest $request, GestionLangue $gestionLang , $id = null);
     {
-        //
+        return $gestionLang->update($request, $id);
     }
 
     /**
@@ -77,8 +86,8 @@ class LangueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request , GestionLangue $gestionLang , $id = null)
     {
-        //
+        return $gestionLang->delete($request, $id);
     }
 }

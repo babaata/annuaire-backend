@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\{AdresseCreateRequest,AdresseUpdateRequest};
+use App\Gestions\{GestionAdresse};
+use App\Models\{Adresse,Education};
 
 class AdresseController extends Controller
 {
@@ -11,9 +14,12 @@ class AdresseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return response()->json([
+            'status' => true,
+            'adresse' => $request->user()->adresse
+        ]);
     }
 
     /**
@@ -32,9 +38,9 @@ class AdresseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AdresseCreateRequest $request , GestionAdresse $gestionAdd)
     {
-        //
+        return $gestionAdd->store($request);
     }
 
     /**
@@ -43,9 +49,12 @@ class AdresseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request , $id = null)
     {
-        //
+        return response()->json([
+            'status' => true,
+            'adresse' => $request->user()->adresse()->find($id)
+        ]);
     }
 
     /**
@@ -66,9 +75,9 @@ class AdresseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AdresseUpdateRequest $request, GestionAdresse $gestionAdd , $id = null)
     {
-        //
+        return $gestionAdd->update($request, $id);
     }
 
     /**
@@ -77,8 +86,8 @@ class AdresseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request , GestionAdresse $gestionAdd , $id = null)
     {
-        //
+        return $gestionAdd->delete($request, $id);
     }
 }
