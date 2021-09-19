@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $id_experience_professionnelle
  * @property string $entreprise
- * @property string $intitule_poste
+ * @property string $poste
  * @property Carbon $date_debut
  * @property Carbon $date_fin
  * @property string $description
@@ -47,7 +47,7 @@ class ExperienceProfessionnelle extends Model
 
 	protected $fillable = [
 		'entreprise',
-		'intitule_poste',
+		'poste',
 		'date_debut',
 		'date_fin',
 		'description',
@@ -60,7 +60,7 @@ class ExperienceProfessionnelle extends Model
 		return $this->belongsTo(Profil::class, 'id_profil');
 	}
 
-	public function type_contrat()
+	public function typeContrat()
 	{
 		return $this->belongsTo(TypeContrat::class, 'id_type_contrat');
 	}

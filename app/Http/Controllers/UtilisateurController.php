@@ -3,19 +3,41 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\{UtilisateurCreateRequest, LoginRequest};
+use App\Http\Requests\{UtilisateurCreateRequest, LoginRequest, UserPictureRequest};
 use App\Gestions\{GestionUtilisateur};
 use App\Models\{Utilisateur, Profil};
 
 class UtilisateurController extends Controller
 {
 
+    public function getBydId(GestionUtilisateur $gestion, $user = null)
+    {
+        return $gestion->getBydId($user);
+    }
+
+    public function allUsers(GestionUtilisateur $gestion, $limit = 10)
+    {
+        return $gestion->allUsers($limit);
+    }
+
+    public function saveUserPicture(UserPictureRequest $request, GestionUtilisateur $gestion)
+    {
+        return $gestion->saveUserPicture($request);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+        return response()->json(['status' => true]);
+    }
+
 
     public function refresh(Request $request)
     {
         return response()->json([
             'status' => true,
-            'token' => $request->user()->refreshToken()
+            'access_token' => $request->user()->createToken("access_token")->plainTextToken,
+            'user' => $request->user()
         ]);
     }
 

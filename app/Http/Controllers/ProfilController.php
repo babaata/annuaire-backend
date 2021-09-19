@@ -16,9 +16,18 @@ class ProfilController extends Controller
      */
     public function index(Request $request)
     {
+
+        $profils = $request->user()
+            ->profils()
+            ->with('educations')
+            ->with('competences')
+            ->with('certifications')
+            ->with('experienceProfessionnelles')
+            ->with('certifications')
+            ->get();
         return response()->json([
             'status' => true,
-            'profils' => $request->user()->profils
+            'profils' => $profils
         ]);
     }
 
@@ -51,9 +60,19 @@ class ProfilController extends Controller
      */
     public function show(Request $request, $id = null)
     {
+        $profil = $request->user()
+            ->profils()
+            ->find($id)
+            ->with('educations')
+            ->with('competences')
+            ->with('certifications')
+            ->with('experienceProfessionnelles')
+            ->with('certifications')
+            ->get();
+
         return response()->json([
             'status' => true,
-            'profil' => $request->user()->profils()->find($id)
+            'profil' => $profil
         ]);
     }
 

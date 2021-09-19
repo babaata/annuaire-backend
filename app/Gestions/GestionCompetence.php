@@ -9,18 +9,19 @@ class GestionCompetence
 	 * @access public
 	 * @return Response 
 	 */
-	public function all(){
+	public function all($request){
 
 		try {
 
-            $competences = Competence::all();
+			$competences = Competence::whereIn('id_profil', function ($query) use ($request){
+	            $query->from('profil')->whereIdUtilisateur($request->user()->id_utilisateur)
+	            ->select('id_profil')->get();
+	        })->with('profil')->get();
 
-            if(is_null($competences)) return response()->json(['status'=>false, 'message'=>'La liste des competences est vide'], 200);
-
-            return response()->json([
-				'status'  => true,
-				'content' => $competences ,
-			], 200);
+	        return response()->json([
+	            'status' => true,
+	            'competences' => $competences
+	        ]);
             
         } catch(\Exception $e) {
 
@@ -39,21 +40,21 @@ class GestionCompetence
 	 * @return Response
 	 * 
 	 */
-	public function find($id){
+	public function find($request, $id){
 
 		try {
 
-            $competence = Competence::find($id);
+			$competences = Competence::whereIn('id_profil', function ($query) use ($request){
+	            $query->from('profil')->whereIdUtilisateur($request->user()->id_utilisateur)
+	            ->select('id_profil')->get();
+	        })->whereIdCompetence($id)->with('profil');
 
-            if(is_null($competence)) return response()->json(['status'=>false, 'message'=>'Oopps competence non trouvée.'], 200);
-
-            return response()->json([
-				'status'  => true,
-				'content' => $competence ,
-			], 200);
+	        return response()->json([
+	            'status' => $competences->exists(),
+	            'competence' => $competences->exists() ? $competences->first():null
+	        ]);
             
         } catch(\Exception $e) {
-
 			return response()->json([
 				'status'  => false,
 				'message' => $e->getMessage() ,
@@ -72,19 +73,16 @@ class GestionCompetence
 		try {
 
             $competence = Competence::create([
-								'id_profil' => $data->id_profil,
-								'nom' => $data->nom,
-								'niveau' => $data->niveau
-							]);
-
-            if(is_null($competence)) return response()->json(['status'=>false, 'message'=>'Oopps une erreur est survenue.'], 200);
+				'id_profil' => $data->profil,
+				'nom' => $data->nom,
+				'niveau' => $data->niveau
+			]);
 
             return response()->json([
 				'status' => true,
-				'id' => $competence->id_competence ,
+				'id' => $competence->id_competence,
 				'message' => trans("Competence créée avec succès")
 			]);
-	
             
         } catch(\Exception $e) {
 
@@ -106,22 +104,25 @@ class GestionCompetence
 	{
 		try {
 
-            $competence = Competence::find($id);
-			$status     = false;
+			$competence = Competence::whereIn('id_profil', function ($query) use ($data){
+	            $query->from('profil')->whereIdUtilisateur($data->user()->id_utilisateur)
+	            ->select('id_profil')->get();
+	        })->whereIdCompetence($id);
 
-            if(is_null($competence)) return response()->json(['status'=>$status, 'message'=>'Desolee, Cette competence n\'existe pas.'], 200);
-			
-			$competence->update([
-				'id_profil' => $data->id_profil,
-				'nom' => $data->nom,
-				'niveau' => $data->niveau
-			]);
+	        if ($competence->exists()) {
 
-			$status = true;
+	        	$competence->first()->update([
+					'nom' => $data->nom,
+					'niveau' => $data->niveau
+				]);
+	        }
 
-            return response()->json([
+	        $status = $competence->exists();
+
+			return response()->json([
 				'status' => $status,
-				'message' => "Competence modifiée avec succès"
+				'id' => $status ? $competence->first()->id_competence:null,
+				'message' => $status ? "Competence modifié avec succès":"Competence invalide"
 			]);
             
         } catch(\Exception $e) {
@@ -129,7 +130,7 @@ class GestionCompetence
 			return response()->json([
 				'status'  => false,
 				'message' => $e->getMessage() ,
-			], $e->getCode());
+			]);
         }
 	}
 
@@ -140,21 +141,22 @@ class GestionCompetence
 	 * @return Response
 	 * 
 	 */
-	public function delete($id)
+	public function delete($data, $id)
 	{
 		try {
 
-            $competence = Competence::find($id);
-			$status     = false;
+			$competence = Competence::whereIn('id_profil', function ($query) use ($data){
+				$query->from('profil')->whereIdUtilisateur($data->user()->id_utilisateur)
+				->select('id_profil')->get();
+			})->whereIdCompetence($id);
 
-            if(is_null($competence)) return response()->json(['status'=>$status, 'message'=>'Desolee, Cette competence n\'existe pas.'], 200);
-			
+			$status = $competence->exists();
+
 			$competence->delete();
-			$status = true;
 
             return response()->json([
 				'status' => $status,
-				'message' => "Competence supprimée avec succès"
+				'message' => $status ? "Competence supprimée avec succès":"competence invalide"
 			]);
             
         } catch(\Exception $e) {
@@ -162,7 +164,7 @@ class GestionCompetence
 			return response()->json([
 				'status'  => false,
 				'message' => $e->getMessage() ,
-			], $e->getCode());
+			]);
         }
 	}
 }

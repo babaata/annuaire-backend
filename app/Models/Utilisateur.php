@@ -16,6 +16,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\PersonalAccessToken;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class Utilisateur
@@ -61,7 +62,8 @@ class Utilisateur extends Authenticatable
 	];
 
 	protected $hidden = [
-		'password'
+		'password',
+		'api_token'
 	];
 
 	protected $fillable = [
@@ -89,6 +91,11 @@ class Utilisateur extends Authenticatable
 	public function roles()
 	{
 		return $this->belongsToMany(Role::class, 'utilisateur_role', 'id_utilisateur', 'id_role');
+	}
+
+	public function langues()
+	{
+		return $this->hasMany(Langue::class, 'id_utilisateur');
 	}
 
 	public function refreshToken()

@@ -16,7 +16,7 @@ class CreateProfilTable extends Migration
         Schema::create('profil', function (Blueprint $table) {
             $table->integer('id_profil')->autoIncrement();
             $table->string("titre");
-            $table->text("resume");
+            $table->text("resume")->nullable();
 
             create_fk($table, "utilisateur");
         });

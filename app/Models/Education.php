@@ -15,14 +15,14 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $id_education
  * @property string $ecole
- * @property string $type_diplome
+ * @property string|null $pays
+ * @property string|null $ville
+ * @property string $diplome
  * @property Carbon $date_debut
  * @property Carbon $date_fin
  * @property string $description
- * @property int $id_adresse
  * @property int $id_profil
  * 
- * @property Adresse $adresse
  * @property Profil $profil
  * @property Collection|Media[] $media
  *
@@ -35,7 +35,6 @@ class Education extends Model
 	public $timestamps = false;
 
 	protected $casts = [
-		'id_adresse' => 'int',
 		'id_profil' => 'int'
 	];
 
@@ -46,18 +45,14 @@ class Education extends Model
 
 	protected $fillable = [
 		'ecole',
-		'type_diplome',
+		'pays',
+		'ville',
+		'diplome',
 		'date_debut',
 		'date_fin',
 		'description',
-		'id_adresse',
 		'id_profil'
 	];
-
-	public function adresse()
-	{
-		return $this->belongsTo(Adresse::class, 'id_adresse');
-	}
 
 	public function profil()
 	{

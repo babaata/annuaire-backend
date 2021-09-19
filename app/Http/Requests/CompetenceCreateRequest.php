@@ -27,7 +27,7 @@ class CompetenceCreateRequest extends FormRequest
             //
             'nom' => 'required|max:255',
             'niveau' => 'required|max:255',
-            'id_profil' => 'required|max:11'
+            'profil' => 'required|max:11'
         ];
     }
 }

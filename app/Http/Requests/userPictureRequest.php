@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LangueUpdateRequest extends FormRequest
+class userPictureRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class LangueUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,8 +24,7 @@ class LangueUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'nom' => 'required|max:255',
-            'niveau' => 'nullable|max:255',
+            //
         ];
     }
 }
