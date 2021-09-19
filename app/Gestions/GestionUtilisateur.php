@@ -38,7 +38,6 @@ class GestionUtilisateur
 
 		return response()->json([
             "status" => true,
-            'count' => $users->count(),
             'users' => $users->get()
         ]);
 	}
