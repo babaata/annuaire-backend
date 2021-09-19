@@ -35,6 +35,17 @@ Route::middleware(['auth:api'])->group(function (){
     Route::put('/v1/competence/{competence}', "CompetenceController@update");
     Route::delete('/v1/competence/{competence}', "CompetenceController@destroy");
 
+    /**
+     * Certification
+     */
+
+    Route::get('/v1/certifications', "CertificationController@index");
+    Route::post('/v1/certification', "CertificationController@store");
+    Route::get('/v1/certification/{certification}', "CertificationController@show");
+    
+    Route::put('/v1/certification/{certification}', "CertificationController@update");
+    Route::delete('/v1/certification/{certification}', "CertificationController@destroy");
+
     
 
 
