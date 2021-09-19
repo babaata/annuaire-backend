@@ -10,9 +10,20 @@ use App\Models\{Utilisateur, Profil};
 class UtilisateurController extends Controller
 {
 
+    public function lastProfil(GestionUtilisateur $gestion, $limit = 10)
+    {
+        return $gestion->lastProfil($limit);
+    }
+
     public function saveUserPicture(UserPictureRequest $request, GestionUtilisateur $gestion)
     {
         return $gestion->saveUserPicture($request);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+        return response()->json(['status' => true]);
     }
 
 

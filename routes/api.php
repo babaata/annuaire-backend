@@ -43,6 +43,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //endpoint user
     Route::post('/user/picture', 'UtilisateurController@saveUserPicture');
 
+    //Logout endpoint
+    Route::get('/user/logout', 'UtilisateurController@logout');
 });
 
 
@@ -53,3 +55,6 @@ Route::middleware(['auth:api'])->group(function (){
 //Inscription d'un utilisateur standart
 Route::post('/user/create', 'UtilisateurController@store');
 Route::post('/user/login', 'UtilisateurController@login');
+
+//Get last profil
+Route::get('/users/last/{limit?}', 'UtilisateurController@lastProfil');
