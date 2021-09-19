@@ -56,7 +56,8 @@ Route::middleware(['auth:api'])->group(function (){
 Route::post('/user/create', 'UtilisateurController@store');
 Route::post('/user/login', 'UtilisateurController@login');
 
-//Get last profil
+//Gestion publique de l'utilisateur
 Route::get('/users/last/{limit?}', 'UtilisateurController@lastProfil');
 
-//Gestion publique de l'utilisateur
+//Get user by id
+Route::get('/user/{user}', 'UtilisateurController@getBydId');

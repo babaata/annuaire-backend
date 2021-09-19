@@ -10,6 +10,11 @@ use App\Models\{Utilisateur, Profil};
 class UtilisateurController extends Controller
 {
 
+    public function getBydId(GestionUtilisateur $gestion, $user = null)
+    {
+        return $gestion->getBydId($user);
+    }
+
     public function lastProfil(GestionUtilisateur $gestion, $limit = 10)
     {
         return $gestion->lastProfil($limit);
