@@ -61,7 +61,8 @@ class Utilisateur extends Authenticatable
 	];
 
 	protected $hidden = [
-		'password'
+		'password',
+		'api_token'
 	];
 
 	protected $fillable = [

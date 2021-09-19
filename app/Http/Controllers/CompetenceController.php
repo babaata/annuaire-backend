@@ -13,9 +13,9 @@ class CompetenceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(GestionCompetence $gestion)
+    public function index(Request $request, GestionCompetence $gestion)
     {
-        return $gestion->all();
+        return $gestion->all($request);
     }
 
     /**
@@ -45,9 +45,9 @@ class CompetenceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(GestionCompetence $gestion, $id)
+    public function show(Request $request, GestionCompetence $gestion, $id)
     {
-        return $gestion->find($id);
+        return $gestion->find($request, $id);
     }
 
     /**
@@ -79,8 +79,8 @@ class CompetenceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(GestionCompetence $gestion, $id)
+    public function destroy(Request $request, GestionCompetence $gestion, $id)
     {
-        return $gestion->delete($id);
+        return $gestion->delete($request, $id);
     }
 }

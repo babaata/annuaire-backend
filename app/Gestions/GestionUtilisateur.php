@@ -48,9 +48,14 @@ class GestionUtilisateur
 
 			if (Hash::check($data->password, $hashedPassword)) {
 
+				$token = $user->createToken("access_token");
+				$api_token = $user->refreshToken();
+				$user->update(['api_token' => $api_token]);
+
 		    	return response()->json([
 					'status' => true,
-					'api_token' => $user->api_token,
+					'access_token' => $token->plainTextToken,
+					'user' => $user,
 					'message' => "Utilisateur authentifié",
 				]);
 			}

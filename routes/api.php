@@ -14,9 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:api'])->group(function (){
-    Route::apiResource('adresse', AdresseController::class);
-    
+Route::middleware(['auth:sanctum'])->group(function () {
+
     //endpoints profil
     Route::get('/profils', "ProfilController@index");
     Route::get('/profil/{profil}', "ProfilController@show");
@@ -24,30 +23,28 @@ Route::middleware(['auth:api'])->group(function (){
     Route::put('/profil/{profil}', "ProfilController@update");
     Route::delete('/profil/{profil}', "ProfilController@destroy");
 
-    //endpoints
+    //endpoints education
     Route::get('/educations', "EducationController@index");
     Route::get('/education/{education}', "EducationController@show");
     Route::post('/education', "EducationController@store");
     Route::put('/education/{education}', "EducationController@update");
     Route::delete('/education/{education}', "EducationController@destroy");
 
-    Route::any('/refresh', "UtilisateurController@refresh");
-
     /**
      * Competences Endpoints
-     */
-
-    Route::get('/v1/competences', "CompetenceController@index");
-    Route::post('/v1/competence', "CompetenceController@store");
-    Route::get('/v1/competence/{competence}', "CompetenceController@show");
+    */
+    Route::get('/competences', "CompetenceController@index");
+    Route::post('/competence', "CompetenceController@store");
+    Route::get('/competence/{competence}', "CompetenceController@show");
     
-    Route::put('/v1/competence/{competence}', "CompetenceController@update");
-    Route::delete('/v1/competence/{competence}', "CompetenceController@destroy");
+    Route::put('/competence/{competence}', "CompetenceController@update");
+    Route::delete('/competence/{competence}', "CompetenceController@destroy");
 
-    
+});
 
 
-    
+Route::middleware(['auth:api'])->group(function (){
+    Route::any('/refresh', "UtilisateurController@refresh");
 });
 
 //Inscription d'un utilisateur standart
