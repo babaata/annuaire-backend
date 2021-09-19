@@ -17,7 +17,7 @@ class GestionUtilisateur
 		$token = Str::random(60);
 
 		$user = Utilisateur::create([
-			'nom_utilisateur' => $data->user_name,
+			'nom_utilisateur' => $data->username,
 			'nom' => $data->nom,
 			'prenom' => $data->prenom,
 			'email' => $data->email,
