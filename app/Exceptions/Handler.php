@@ -51,10 +51,14 @@ class Handler extends ExceptionHandler
         if ($exception instanceof ValidationException) {
             return response()->json([
                 "message" => "Les données fournies sont invalides.",
+                'status' => false,
                 'errors' => $exception->errors()
             ]);
         }elseif ($exception instanceof NotFoundHttpException) {
-            return response()->json(["message" => "La ressource demandée n'est pas disponible"]);
+            return response()->json([
+                "message" => "La ressource demandée n'est pas disponible",
+                'status' => false,
+            ]);
         }
 
         return parent::render($request, $exception);
@@ -63,7 +67,10 @@ class Handler extends ExceptionHandler
     protected function unauthenticated($request, \Illuminate\Auth\AuthenticationException $exception)
     {
         if ($request->expectsJson()) {
-            return response()->json(['message' => 'Non authentifié']);
+            return response()->json([
+                'message' => 'Non authentifié',
+                'status' => false,
+            ]);
         }
 
         // return a plain 401 response even when not a json call
