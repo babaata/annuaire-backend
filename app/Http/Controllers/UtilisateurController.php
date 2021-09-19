@@ -15,9 +15,9 @@ class UtilisateurController extends Controller
         return $gestion->getBydId($user);
     }
 
-    public function lastProfil(GestionUtilisateur $gestion, $limit = 10)
+    public function allUsers(GestionUtilisateur $gestion, $limit = 10)
     {
-        return $gestion->lastProfil($limit);
+        return $gestion->allUsers($limit);
     }
 
     public function saveUserPicture(UserPictureRequest $request, GestionUtilisateur $gestion)
