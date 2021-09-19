@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\{UtilisateurCreateRequest, LoginRequest};
+use App\Http\Requests\{UtilisateurCreateRequest, LoginRequest, UserPictureRequest};
 use App\Gestions\{GestionUtilisateur};
 use App\Models\{Utilisateur, Profil};
 
 class UtilisateurController extends Controller
 {
+
+    public function saveUserPicture(UserPictureRequest $request, GestionUtilisateur $gestion)
+    {
+        return $gestion->saveUserPicture($request);
+    }
 
 
     public function refresh(Request $request)

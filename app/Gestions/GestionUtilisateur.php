@@ -7,9 +7,31 @@ namespace App\Gestions;
 use App\Models\{Utilisateur};
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class GestionUtilisateur
 {
+
+	public function saveUserPicture($data)
+	{
+		$status = false;
+		$image = null;
+		if ($status = $data->file('image')->isValid()) {
+            
+            //store file into users pictures folder
+            $image = $data->image->store('public/users');
+
+            $data->user()->update([
+            	'url_photo' => $image
+            ]);
+        }
+
+        return response()->json([
+            "status" => $status,
+            "message" => $status ? trans("Image téléchargée avec succès"):"Image invalide",
+            "image" => $data->user()->getPhoto()
+        ]);
+	}
 	
 	public function store($data)
 	{
