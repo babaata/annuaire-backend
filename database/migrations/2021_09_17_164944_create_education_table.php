@@ -21,7 +21,7 @@ class CreateEducationTable extends Migration
             $table->date("date_fin");
             $table->text("description");
 
-            create_fk($table, "adresse");
+            //create_fk($table, "adresse");
             create_fk($table, "profil");
         });
     }
