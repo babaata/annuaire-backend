@@ -15,7 +15,8 @@ class UtilisateurController extends Controller
     {
         return response()->json([
             'status' => true,
-            'token' => $request->user()->refreshToken()
+            'access_token' => $request->user()->createToken("access_token")->plainTextToken,
+            'user' => $request->user()
         ]);
     }
 
