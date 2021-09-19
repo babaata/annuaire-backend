@@ -96,7 +96,7 @@ class GestionUtilisateur
 		return response()->json([
 			'status' => false,
 			'message' => "identifiant ou mot de passe incorrect",
-		], 403);
+		]);
 	}
 }
  ?>

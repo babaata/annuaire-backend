@@ -58,3 +58,5 @@ Route::post('/user/login', 'UtilisateurController@login');
 
 //Get last profil
 Route::get('/users/last/{limit?}', 'UtilisateurController@lastProfil');
+
+//Gestion publique de l'utilisateur
