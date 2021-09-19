@@ -15,12 +15,12 @@ class GestionUtilisateur
 	public function getBydId($user)
 	{
 		$user = Utilisateur::whereIdUtilisateur($user)
+			->with('langues')
 			->with(
 				'profils.competences', 
 				'profils.educations', 
 				'profils.certifications',
 				'profils.experienceProfessionnelles',
-				'profils.langues'
 			);
 
 		return response()->json([
@@ -34,6 +34,7 @@ class GestionUtilisateur
 	{
 		$users = Utilisateur::orderBy('date_de_creation')
 			->with('profils')
+			->with('langues')
 			->limit($limit);
 
 		return response()->json([

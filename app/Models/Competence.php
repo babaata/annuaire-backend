@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $id_competence
  * @property string $nom
- * @property string $niveau
+ * @property string|null $niveau
  * @property int $id_profil
  * 
  * @property Profil $profil

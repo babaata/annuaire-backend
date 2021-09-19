@@ -6,6 +6,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -57,6 +58,11 @@ class Handler extends ExceptionHandler
         }elseif ($exception instanceof NotFoundHttpException) {
             return response()->json([
                 "message" => "La ressource demandée n'est pas disponible",
+                'status' => false,
+            ]);
+        }elseif ($exception instanceof MethodNotAllowedHttpException) {
+            return response()->json([
+                "message" => "Cette méthode n'est pas prise en charge pour cette route",
                 'status' => false,
             ]);
         }

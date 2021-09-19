@@ -16,12 +16,13 @@ class CreateEducationTable extends Migration
         Schema::create('education', function (Blueprint $table) {
             $table->integer('id_education')->autoIncrement();
             $table->string("ecole");
-            $table->string("type_diplome");
+            $table->string("pays")->nullable();;
+            $table->string("ville")->nullable();;
+            $table->string("diplome");
             $table->date("date_debut");
             $table->date("date_fin");
             $table->text("description");
 
-            //create_fk($table, "adresse");
             create_fk($table, "profil");
         });
     }

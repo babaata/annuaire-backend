@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property Collection|Competence[] $competences
  * @property Collection|Education[] $education
  * @property Collection|ExperienceProfessionnelle[] $experience_professionnelles
- * @property Collection|Langue[] $langues
  *
  * @package App\Models
  */
@@ -57,7 +56,7 @@ class Profil extends Model
 		return $this->hasMany(Competence::class, 'id_profil');
 	}
 
-	public function educations()
+	public function education()
 	{
 		return $this->hasMany(Education::class, 'id_profil');
 	}
@@ -65,10 +64,5 @@ class Profil extends Model
 	public function experienceProfessionnelles()
 	{
 		return $this->hasMany(ExperienceProfessionnelle::class, 'id_profil');
-	}
-
-	public function langues()
-	{
-		return $this->hasMany(Langue::class, 'id_profil');
 	}
 }

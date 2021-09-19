@@ -42,7 +42,7 @@ class Referent extends Model
 		'id_experience_professionnelle'
 	];
 
-	public function experienceProfessionnelle()
+	public function experience_professionnelle()
 	{
 		return $this->belongsTo(ExperienceProfessionnelle::class, 'id_experience_professionnelle');
 	}

@@ -93,6 +93,11 @@ class Utilisateur extends Authenticatable
 		return $this->belongsToMany(Role::class, 'utilisateur_role', 'id_utilisateur', 'id_role');
 	}
 
+	public function langues()
+	{
+		return $this->hasMany(Langue::class, 'id_utilisateur');
+	}
+
 	public function refreshToken()
 	{
 		$token = Str::random(60);

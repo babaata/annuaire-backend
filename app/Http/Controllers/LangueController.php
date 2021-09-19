@@ -3,17 +3,40 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\{LangueCreateRequest, LoginRequest, LangueUpdateRequest};
+use App\Gestions\{GestionLangue};
+use App\Models\{Utilisateur, Profil, Langue};
 
 class LangueController extends Controller
 {
+
+    public function liste()
+    {
+        return response()->json([
+            'status' => true,
+            'langues' => [
+                'Koniake',
+                'Malinke',
+                'Soussous',
+                'Pular',
+                'Anglais',
+                'Français',
+                'Espanol',
+                'Russe'
+            ]
+        ]);
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return response()->json([
+            'status' => true,
+            'langues' => $request->user()->langues
+        ]);
     }
 
     /**
@@ -32,9 +55,9 @@ class LangueController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(LangueCreateRequest $request, GestionLangue $gestion)
     {
-        //
+        return $gestion->store($request);
     }
 
     /**
@@ -43,9 +66,12 @@ class LangueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id = null)
     {
-        //
+        return response()->json([
+            'status' => true,
+            'langue' => $request->user()->langues()->find($id)
+        ]);
     }
 
     /**
@@ -66,9 +92,9 @@ class LangueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(LangueUpdateRequest $request, GestionLangue $gestion, $id = null)
     {
-        //
+        return $gestion->update($request, $id);
     }
 
     /**
@@ -77,8 +103,8 @@ class LangueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, GestionLangue $gestion, $id = null)
     {
-        //
+        return $gestion->delete($request, $id);
     }
 }

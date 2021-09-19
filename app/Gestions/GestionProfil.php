@@ -14,11 +14,12 @@ class GestionProfil
 	{
 		$user = $data->user();
 
-		$profil = Profil::create([
+		$profil = Profil::firstOrCreate([
 			'titre' => $data->titre,
-			'resume' => $data->resume,
 			'id_utilisateur' => $data->user()->id_utilisateur
 		]);
+
+		$profil->update(['resume' => $data->resume]);
 
 		return response()->json([
 			'status' => true,

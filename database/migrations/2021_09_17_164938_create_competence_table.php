@@ -16,7 +16,7 @@ class CreateCompetenceTable extends Migration
         Schema::create('competence', function (Blueprint $table) {
             $table->integer('id_competence')->autoIncrement();
             $table->string("nom");
-            $table->string("niveau");
+            $table->string("niveau")->nullable();
 
             create_fk($table, "profil");
         });
