@@ -16,6 +16,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\PersonalAccessToken;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class Utilisateur
@@ -81,6 +82,17 @@ class Utilisateur extends Authenticatable
 		'password',
 		'api_token'
 	];
+
+	public function getPhoto()
+    {
+        $file = Storage::path($this->url_photo);
+
+        if (file_exists($file)) {
+            return asset(Storage::url($this->url_photo));
+        }
+
+        return asset("assets/images/default.jpg");
+    }
 
 	public function profils()
 	{

@@ -40,6 +40,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/competence/{competence}', "CompetenceController@update");
     Route::delete('/competence/{competence}', "CompetenceController@destroy");
 
+    //endpoint user
+    Route::post('/user/picture', 'UtilisateurController@saveUserPicture');
+
 });
 
 
