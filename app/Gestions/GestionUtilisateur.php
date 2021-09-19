@@ -4,13 +4,31 @@ namespace App\Gestions;
  * 
  */
 
-use App\Models\{Utilisateur};
+use App\Models\{Utilisateur, Profil};
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 class GestionUtilisateur
 {
+
+	public function getBydId($user)
+	{
+		$user = Utilisateur::whereIdUtilisateur($user)
+			->with(
+				'profils.competences', 
+				'profils.educations', 
+				'profils.certifications',
+				'profils.experienceProfessionnelles',
+				'profils.langues'
+			);
+
+		return response()->json([
+            "status" => $user->exists(),
+            'user' => $user->first(),
+            'message' => $user->exists() ? null:"Aucun utilisateur de ce nom"
+        ]);
+	}
 
 	public function lastProfil($limit = 10)
 	{
