@@ -29,7 +29,7 @@ class UtilisateurCreateRequest extends FormRequest
             'telephone' => 'required',
             'email' => 'required|email|unique:utilisateur',
             'user_name' => 'required|max:100',
-            'password' => 'required|min:6',
+            'password' => 'required|confirmed|min:6',
         ];
     }
 }
