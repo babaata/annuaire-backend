@@ -1,0 +1,7 @@
+
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/evilwrer/babaata.eviltech.org/
+    #- /bin/cp -R * $DEPLOYPATH
+    #- /bin/php 
