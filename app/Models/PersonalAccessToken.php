@@ -8,7 +8,6 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 
 /**
  * Class PersonalAccessToken
@@ -25,7 +24,7 @@ use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
  *
  * @package App\Models
  */
-class PersonalAccessToken extends SanctumPersonalAccessToken
+class PersonalAccessToken extends Model
 {
 	protected $table = 'personal_access_tokens';
 
@@ -37,9 +36,9 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
 		'last_used_at'
 	];
 
-	// protected $hidden = [
-	// 	'token'
-	// ];
+	protected $hidden = [
+		'token'
+	];
 
 	protected $fillable = [
 		'tokenable_type',

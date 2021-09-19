@@ -16,6 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
+    //endpoints langues
+    Route::get('/langues', "LangueController@index");
+    Route::get('/langue/{langue}', "LangueController@show");
+    Route::post('/langue', "LangueController@store");
+    Route::put('/langue/{langue}', "LangueController@update");
+    Route::delete('/langue/{langue}', "LangueController@destroy");
+
     //endpoints profil
     Route::get('/profils', "ProfilController@index");
     Route::get('/profil/{profil}', "ProfilController@show");
@@ -61,3 +68,5 @@ Route::get('/users/{limit?}', 'UtilisateurController@allUsers');
 
 //Get user by id
 Route::get('/user/{user}', 'UtilisateurController@getBydId');
+
+Route::get('/langue-supportes', 'LangueController@liste');

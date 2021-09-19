@@ -14,10 +14,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id_langue
  * @property string $nom
  * @property string|null $niveau
- * @property string|null $slug
- * @property int $id_profil
+ * @property int $id_utilisateur
  * 
- * @property Profil $profil
+ * @property Utilisateur $utilisateur
  *
  * @package App\Models
  */
@@ -28,18 +27,17 @@ class Langue extends Model
 	public $timestamps = false;
 
 	protected $casts = [
-		'id_profil' => 'int'
+		'id_utilisateur' => 'int'
 	];
 
 	protected $fillable = [
 		'nom',
 		'niveau',
-		'slug',
-		'id_profil'
+		'id_utilisateur'
 	];
 
-	public function profil()
+	public function utilisateur()
 	{
-		return $this->belongsTo(Profil::class, 'id_profil');
+		return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
 	}
 }

@@ -16,7 +16,7 @@ class CreateExperienceProfessionnelleTable extends Migration
         Schema::create('experience_professionnelle', function (Blueprint $table) {
             $table->integer('id_experience_professionnelle')->autoIncrement();
             $table->string("entreprise");
-            $table->string("intitule_poste");
+            $table->string("poste");
             $table->date("date_debut");
             $table->date("date_fin");
             $table->text("description");

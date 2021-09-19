@@ -17,9 +17,8 @@ class CreateLangueTable extends Migration
             $table->integer('id_langue')->autoIncrement();
             $table->string('nom');
             $table->string('niveau')->nullable();
-            $table->string("slug")->nullable();
 
-            create_fk($table, "profil");
+            create_fk($table, "utilisateur");
         });
     }
 
