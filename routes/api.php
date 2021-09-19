@@ -47,6 +47,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/competence/{competence}', "CompetenceController@update");
     Route::delete('/competence/{competence}', "CompetenceController@destroy");
 
+    /**
+     * Certification
+     */
+
+    Route::get('/v1/certifications', "CertificationController@index");
+    Route::post('/v1/certification', "CertificationController@store");
+    Route::get('/v1/certification/{certification}', "CertificationController@show");
+    
+    Route::put('/v1/certification/{certification}', "CertificationController@update");
+    Route::delete('/v1/certification/{certification}', "CertificationController@destroy");
+
+    
     //endpoint user
     Route::post('/user/picture', 'UtilisateurController@saveUserPicture');
 
