@@ -8,9 +8,71 @@ use App\Models\{Utilisateur, Profil};
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password;
+
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
 class GestionUtilisateur
 {
+	use SendsPasswordResetEmails;
+
+	public function resetPassword($request)
+	{
+		$status = true;
+
+        return response()->json([
+            "status" => $status,
+            'message' => $status ? "Réinitialisation du mot de passe réussie":"Email invalide"
+        ]);
+	}
+
+	public function forgotPassword($data)
+	{
+		$status = true;
+
+        return response()->json([
+            "status" => $status,
+            'message' => $status ? "Lien de réinitialisation du mot de passe envoyé à votre adresse e-mail":"Email invalide"
+        ]);
+	}
+
+	public function updatePassword($data)
+	{
+
+		$status = false;
+
+		if (Hash::check($data->old_password, $data->user()->password)) {
+			$status = true;
+
+		    $data->user()->update([
+				'password' => Hash::make($data->new_password)
+			]);
+		}
+
+		return response()->json([
+            "status" => $status,
+            'message' => $status ? "Le mot de passe a été changé avec succès":"Mot de passe invalide"
+        ]);
+	}
+
+	public function update($data)
+	{
+		$data->user()->update([
+			'nom' => $data->nom,
+			'prenom' => $data->prenom,
+			'email' => $data->email,
+			'telephone' => $data->telephone,
+			'date_de_modification' => now(),
+		]);
+
+		return response()->json([
+            "status" => true,
+            'message' => "Profil modifié avec succès",
+            'user' => $data->user(),
+        ]);
+	}
 
 	public function getBydId($user)
 	{
@@ -66,60 +128,75 @@ class GestionUtilisateur
 	
 	public function store($data)
 	{
-
-		$token = Str::random(60);
-
 		$user = Utilisateur::create([
-			'nom_utilisateur' => $data->username,
 			'nom' => $data->nom,
 			'prenom' => $data->prenom,
 			'email' => $data->email,
 			'telephone' => $data->telephone,
 			'date_de_creation' => now(),
 			'password' => Hash::make($data->password),
-			'api_token' => $token
 		]);
 
-		return response()->json([
-			'status' => true,
-			'api_token' => $token,
-			'access_token' => $user->createToken("access_token")->plainTextToken,
-			'id' => $user->id_utilisateur,
-			'nom' => $user->nom,
-			'prenom' => $user->prenom,
-			'message' => trans("Inscription effectuée avec succès")
-		]);
+		return $this->login([
+			'email' => $user->email,
+			'password' => $data->password
+		], true);
 	}
 
-	public function login($data){
+	/**
+     * Get the token array structure.
+     *
+     * @param  string $token
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'user' => auth()->user()
+        ]);
+    }
 
-		$user = Utilisateur::whereNomUtilisateur($data->username);
+	public function login($data, $register = false){
 
-		if ($user->exists()) {
-			$user = $user->first();
+		$credentials = [
+			'email' => $register ? $data['email']:$data->email,
+			'password' => $register ? $data['password']:$data->password
+		];
 
-			$hashedPassword = $user->password;
+		if (!$token = auth()->attempt($credentials)) {
+            return response()->json([
+            	'status' => false,
+				'message' => "identifiant ou mot de passe incorrect"
+            ]);
+        }
 
-			if (Hash::check($data->password, $hashedPassword)) {
-
-				$token = $user->createToken("access_token");
-				$api_token = $user->refreshToken();
-				$user->update(['api_token' => $api_token]);
-
-		    	return response()->json([
-					'status' => true,
-					'access_token' => $token->plainTextToken,
-					'user' => $user,
-					'message' => "Utilisateur authentifié",
-				]);
-			}
-		}
-
-
-		return response()->json([
-			'status' => false,
-			'message' => "identifiant ou mot de passe incorrect",
-		]);
+        return $this->respondWithToken($token);
 	}
+
+	/**
+     * Log the user out (Invalidate the token).
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout() {
+        auth('api')->logout();
+        return response()->json([
+        	'status' => true,
+        	'message' => 'User successfully signed out'
+        ]);
+    }
+
+    /**
+     * Refresh a token.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refresh() {
+        return $this->respondWithToken(auth()->refresh());
+    }
 }
  ?>

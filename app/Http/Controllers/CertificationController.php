@@ -13,9 +13,9 @@ class CertificationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(GestionCertification $gestion)
+    public function index(Request $request, GestionCertification $gestion)
     {
-        return $gestion->all();
+        return $gestion->all($request);
     }
 
     /**
@@ -45,9 +45,9 @@ class CertificationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(GestionCertification $gestion, $id)
+    public function show(Request $request, GestionCertification $gestion, $id)
     {
-        return $gestion->find($id);
+        return $gestion->find($request, $id);
     }
 
     /**
@@ -79,8 +79,8 @@ class CertificationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(GestionCertification $gestion, $id)
+    public function destroy(Request $request, GestionCertification $gestion, $id)
     {
-        return $gestion->delete($id);
+        return $gestion->delete($request, $id);
     }
 }

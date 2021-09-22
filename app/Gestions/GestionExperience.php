@@ -1,11 +1,11 @@
 <?php 
 namespace App\Gestions;
-use App\Models\Competence;
+use App\Models\{ExperienceProfessionnelle};
 use DB;
-class GestionCompetence
+class GestionExperience
 {
 	/**
-	 * Retourne toutes les competences
+	 * Retourne la liste des certifications
 	 * @access public
 	 * @return Response 
 	 */
@@ -13,14 +13,14 @@ class GestionCompetence
 
 		try {
 
-			$competences = Competence::whereIn('id_profil', function ($query) use ($request){
+			$exps = ExperienceProfessionnelle::whereIn('id_profil', function ($query) use ($request){
 	            $query->from('profil')->whereIdUtilisateur($request->user()->id_utilisateur)
 	            ->select('id_profil')->get();
 	        })->with('profil')->get();
 
 	        return response()->json([
 	            'status' => true,
-	            'competences' => $competences
+	            'experiences' => $exps
 	        ]);
             
         } catch(\Exception $e) {
@@ -30,28 +30,27 @@ class GestionCompetence
 				'message' => $e->getMessage() ,
 			]);
         }
-
 	}
 
 	/**
-	 * Retourne une competence
+	 * Retourne une certification
 	 * @access public
 	 * @param $id
 	 * @return Response
 	 * 
 	 */
-	public function find($request, $id){
+	public function find($data, $id){
 
 		try {
 
-			$competences = Competence::whereIn('id_profil', function ($query) use ($request){
+			$exp = ExperienceProfessionnelle::whereIn('id_profil', function ($query) use ($request){
 	            $query->from('profil')->whereIdUtilisateur($request->user()->id_utilisateur)
 	            ->select('id_profil')->get();
-	        })->whereIdCompetence($id)->with('profil');
+	        })->whereIdExperienceProfessionnelle($id)->with('profil');
 
 	        return response()->json([
-	            'status' => $competences->exists(),
-	            'competence' => $competences->exists() ? $competences->first():null
+	            'status' => $exp->exists(),
+	            'experience' => $exp->exists() ? $exp->first():null
 	        ]);
             
         } catch(\Exception $e) {
@@ -63,25 +62,30 @@ class GestionCompetence
 	}
 
 	/**
-	 * Enregistre une competence
+	 * Enregistre une certification
 	 * @access public
-	 * @param $CompetenceRequest
+	 * @param $CertificationsRequest
 	 * @return Response
 	 */
     public function store($data)
 	{
+
 		try {
 
-            $competence = Competence::create([
+            $exp = ExperienceProfessionnelle::create([
+				'entreprise' => $data->entreprise,
+				'poste' => $data->poste,
+				'date_debut' => $data->debut,
+				'date_fin' => $data->fin,
+				'description' => $data->description,
 				'id_profil' => $data->profil,
-				'nom' => $data->nom,
-				'niveau' => $data->niveau
+				'id_type_contrat' => $data->type_contrat
 			]);
 
             return response()->json([
 				'status' => true,
-				'id' => $competence->id_competence,
-				'message' => trans("Competence créée avec succès")
+				'id' => $exp->id_experience_professionnelle,
+				'message' => trans("Experience professionnelle créée avec succès")
 			]);
             
         } catch(\Exception $e) {
@@ -94,9 +98,9 @@ class GestionCompetence
 	}
 
 	/**
-	 * Mettre à jours une competence
+	 * Mettre à jours une certification
 	 * @access public
-	 * @param $CompetenceRequest, $id
+	 * @param $CertificationsRequest, $id
 	 * @return Response
 	 */
 
@@ -104,25 +108,30 @@ class GestionCompetence
 	{
 		try {
 
-			$competence = Competence::whereIn('id_profil', function ($query) use ($data){
+			$exp = ExperienceProfessionnelle::whereIn('id_profil', function ($query) use ($data){
 	            $query->from('profil')->whereIdUtilisateur($data->user()->id_utilisateur)
 	            ->select('id_profil')->get();
-	        })->whereIdCompetence($id);
+	        })->whereIdExperienceProfessionnelle($id);
 
-	        if ($competence->exists()) {
+	        if ($exp->exists()) {
 
-	        	$competence->first()->update([
-					'nom' => $data->nom,
-					'niveau' => $data->niveau
+	        	$exp->first()->update([
+					'entreprise' => $data->entreprise,
+					'poste' => $data->poste,
+					'date_debut' => $data->debut,
+					'date_fin' => $data->fin,
+					'description' => $data->description,
+					'id_profil' => $data->profil,
+					'id_type_contrat' => $data->type_contrat
 				]);
 	        }
 
-	        $status = $competence->exists();
+	        $status = $exp->exists();
 
 			return response()->json([
 				'status' => $status,
-				'id' => $status ? $competence->first()->id_competence:null,
-				'message' => $status ? "Competence modifié avec succès":"Competence invalide"
+				'id' => $status ? $exp->first()->id_experience_professionnelle:null,
+				'message' => $status ? "Experience professionnelle modifié avec succès":"Certification invalide"
 			]);
             
         } catch(\Exception $e) {
@@ -135,7 +144,7 @@ class GestionCompetence
 	}
 
 	/**
-	 * Supprime une competence
+	 * Supprime une certification
 	 * @access public
 	 * @param $id
 	 * @return Response
@@ -143,20 +152,21 @@ class GestionCompetence
 	 */
 	public function delete($data, $id)
 	{
+
 		try {
 
-			$competence = Competence::whereIn('id_profil', function ($query) use ($data){
+			$exp = ExperienceProfessionnelle::whereIn('id_profil', function ($query) use ($data){
 				$query->from('profil')->whereIdUtilisateur($data->user()->id_utilisateur)
 				->select('id_profil')->get();
-			})->whereIdCompetence($id);
+			})->whereIdExperienceProfessionnelle($id);
 
-			$status = $competence->exists();
+			$status = $exp->exists();
 
-			$competence->delete();
+			$exp->delete();
 
             return response()->json([
 				'status' => $status,
-				'message' => $status ? "Competence supprimée avec succès":"competence invalide"
+				'message' => $status ? "Experience professionnelle supprimée avec succès":"Certification invalide"
 			]);
             
         } catch(\Exception $e) {

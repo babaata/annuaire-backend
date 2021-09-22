@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\{ExperienceProfessionnelleCreateRequest, ExperienceProfessionnelleUpdateRequest};
+use App\Gestions\{GestionCompetence, GestionExperience};
 
 class ExperienceProfessionnelleController extends Controller
 {
@@ -11,9 +13,9 @@ class ExperienceProfessionnelleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, GestionExperience $gestion)
     {
-        //
+        return $gestion->all($request);
     }
 
     /**
@@ -32,9 +34,9 @@ class ExperienceProfessionnelleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ExperienceProfessionnelleCreateRequest $request, GestionExperience $gestion)
     {
-        //
+        return $gestion->store($request);
     }
 
     /**
@@ -43,9 +45,9 @@ class ExperienceProfessionnelleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, GestionExperience $gestion, $id)
     {
-        //
+        return $gestion->find($request, $id);
     }
 
     /**
@@ -66,9 +68,9 @@ class ExperienceProfessionnelleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ExperienceProfessionnelleUpdateRequest $request, GestionExperience $gestion, $id)
     {
-        //
+        return $gestion->update($request, $id);
     }
 
     /**
@@ -77,8 +79,8 @@ class ExperienceProfessionnelleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, GestionExperience $gestion, $id)
     {
-        //
+        return $gestion->delete($request, $id);
     }
 }

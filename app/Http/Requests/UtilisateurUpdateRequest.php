@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UtilisateurUpdateRequest extends FormRequest
 {
@@ -23,18 +24,16 @@ class UtilisateurUpdateRequest extends FormRequest
      */
     public function rules()
     {
+
+        $id = $this->user()->id_utilisateur;
+
         return [
-            //
-            'nom_utilisateur' => 'required|max:15',
             'nom' => 'required|max:15',
             'prenom' => 'required|max:25',
-            'date_de_naissance' => 'nullable|date',
-            'sexe' => 'required|max:20',
-            'email' => 'required|email',
-            'telephone' => 'nullable',
-            'statut' => 'nullable|boolean',
-            'url_photo' => 'nullable|max:255',
-            'password' => 'required|min:6|max:255'
+            //'date_de_naissance' => 'nullable|date',
+            'sexe' => ['required', Rule::in(['Homme', 'Femme'])],
+            'telephone' => 'required|unique:utilisateur,telephone,'.$id.',id_utilisateur',
+            'email' => 'required|unique:utilisateur,email,'.$id.',id_utilisateur',
         ];
     }
 }

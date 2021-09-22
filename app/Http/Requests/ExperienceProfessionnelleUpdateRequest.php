@@ -24,14 +24,13 @@ class ExperienceProfessionnelleUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
             'entreprise' => 'required|max:255',
-            'intitule_poste' => 'required|max:255',
-            'date_debut' => 'required|date',
-            'date_fin' => 'required|date',
+            'poste' => 'required|max:255',
+            'debut' => 'required|date',
+            'fin' => 'required|date',
             'description' => 'required',
-            'id_profil' => 'required|integer',
-            'id_type_contrat' => 'required|integer'
+            'profil' => 'required|integer',
+            'type_contrat' => 'required|integer'
         ];
     }
 }

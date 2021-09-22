@@ -3,12 +3,30 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\{UtilisateurCreateRequest, LoginRequest, UserPictureRequest};
+use App\Http\Requests\{UtilisateurCreateRequest, LoginRequest, UserPictureRequest, UtilisateurUpdateRequest, UtilisateurUpdatePasswordRequest, UtilisateurForgotPasswordRequest};
 use App\Gestions\{GestionUtilisateur};
 use App\Models\{Utilisateur, Profil};
 
+
 class UtilisateurController extends Controller
 {
+    
+
+    public function resetPassword(Request $request, GestionUtilisateur $gestion)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        return $gestion->resetPassword($request);
+    }
+
+    public function forgotPassword(UtilisateurForgotPasswordRequest $request, GestionUtilisateur $gestion)
+    {
+        return $gestion->forgotPassword($request);
+    }
 
     public function getBydId(GestionUtilisateur $gestion, $user = null)
     {
@@ -25,20 +43,15 @@ class UtilisateurController extends Controller
         return $gestion->saveUserPicture($request);
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request, GestionUtilisateur $gestion)
     {
-        $request->user()->tokens()->delete();
-        return response()->json(['status' => true]);
+        return $gestion->logout();
     }
 
 
-    public function refresh(Request $request)
+    public function refresh(Request $request, GestionUtilisateur $gestion)
     {
-        return response()->json([
-            'status' => true,
-            'access_token' => $request->user()->createToken("access_token")->plainTextToken,
-            'user' => $request->user()
-        ]);
+        return $gestion->refresh();
     }
 
     /**
@@ -112,9 +125,14 @@ class UtilisateurController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UtilisateurUpdateRequest $request, GestionUtilisateur $gestion)
     {
-        //
+        return $gestion->update($request);
+    }
+
+    public function updatePassword(UtilisateurUpdatePasswordRequest $request, GestionUtilisateur $gestion)
+    {
+        return $gestion->updatePassword($request);
     }
 
     /**

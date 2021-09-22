@@ -14,7 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::group([
+    'middleware' => 'auth.jwt',
+], function ($router) {
+
+    Route::any('/refresh', "UtilisateurController@refresh");
 
     //endpoints langues
     Route::get('/langues', "LangueController@index");
@@ -49,27 +53,34 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     /**
      * Certification
-     */
-
-    Route::get('/v1/certifications', "CertificationController@index");
-    Route::post('/v1/certification', "CertificationController@store");
-    Route::get('/v1/certification/{certification}', "CertificationController@show");
+    */
+    Route::get('/certifications', "CertificationController@index");
+    Route::post('/certification', "CertificationController@store");
+    Route::get('/certification/{certification}', "CertificationController@show");
     
-    Route::put('/v1/certification/{certification}', "CertificationController@update");
-    Route::delete('/v1/certification/{certification}', "CertificationController@destroy");
+    Route::put('/certification/{certification}', "CertificationController@update");
+    Route::delete('/certification/{certification}', "CertificationController@destroy");
+
+    //Experiences professionnelles
+    Route::get('/experiences', "ExperienceProfessionnelleController@index");
+    Route::post('/experience', "ExperienceProfessionnelleController@store");
+    Route::get('/experience/{experience}', "ExperienceProfessionnelleController@show");
+    
+    Route::put('/experience/{experience}', "ExperienceProfessionnelleController@update");
+    Route::delete('/experience/{experience}', "ExperienceProfessionnelleController@destroy");
 
     
     //endpoint user
     Route::post('/user/picture', 'UtilisateurController@saveUserPicture');
 
     //Logout endpoint
-    Route::get('/user/logout', 'UtilisateurController@logout');
+    Route::any('/user/logout', 'UtilisateurController@logout');
+
+    Route::post('/user/update', 'UtilisateurController@update');
+    Route::put('/user/password', 'UtilisateurController@updatePassword');
+
 });
 
-
-Route::middleware(['auth:api'])->group(function (){
-    Route::any('/refresh', "UtilisateurController@refresh");
-});
 
 //Inscription d'un utilisateur standart
 Route::post('/user/create', 'UtilisateurController@store');
@@ -82,3 +93,11 @@ Route::get('/users/{limit?}', 'UtilisateurController@allUsers');
 Route::get('/user/{user}', 'UtilisateurController@getBydId');
 
 Route::get('/langue-supportes', 'LangueController@liste');
+
+//Reset user passwor
+Route::post('/user/forgot-password', 'UtilisateurController@forgotPassword');
+Route::post('/user/reset-password', 'UtilisateurController@resetPassword');
+
+//Type de contrat
+Route::get('/type-contrats', 'TypeContratController@index');
+
