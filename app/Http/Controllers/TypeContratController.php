@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Gestions\{GestionUtilisateur};
+use App\Models\{Utilisateur, Profil, TypeContrat};
 
 class TypeContratController extends Controller
 {
@@ -13,7 +15,10 @@ class TypeContratController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            "status" => true,
+            'types' => TypeContrat::get()
+        ]);
     }
 
     /**

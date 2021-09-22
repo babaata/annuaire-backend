@@ -18,6 +18,8 @@ use App\Models\PersonalAccessToken;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
+use Tymon\JWTAuth\Contracts\JWTSubject;
+
 /**
  * Class Utilisateur
  * 
@@ -41,10 +43,11 @@ use Illuminate\Support\Facades\Storage;
  *
  * @package App\Models
  */
-class Utilisateur extends Authenticatable
+class Utilisateur extends Authenticatable implements JWTSubject
 {
 
-	use HasApiTokens, HasFactory, Notifiable;
+	// use HasApiTokens, HasFactory, Notifiable;
+	use HasFactory, Notifiable;
 
 	protected $table = 'utilisateur';
 	protected $primaryKey = 'id_utilisateur';
@@ -106,4 +109,18 @@ class Utilisateur extends Authenticatable
 
 		return $token;
 	}
+
+
+    public function getJWTIdentifier() {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims() {
+        return [];
+    }    
 }

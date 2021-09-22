@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CertificationUpdateRequest extends FormRequest
+class UtilisateurUpdatePasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,8 @@ class CertificationUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'nom' => 'required|max:255',
-            'organisme' => 'required|max:255',
-            'level' => 'nullable|max:255',
-            'date_certification' => 'nullable|date',
-            'url' => 'nullable|url',
-            'profil' => 'required|integer|max:11'
+            'old_password' => 'required|min:6',
+            'new_password' => 'required|min:6',
         ];
     }
 }

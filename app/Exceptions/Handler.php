@@ -8,6 +8,12 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
+use Response;
+use Exception;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -37,14 +43,7 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        // $this->renderable(function($exception, $request) {
-        //     // if ($exception instanceof ValidationException) {
-        //     //     return response()->json([
-        //     //         "message" => "Les données fournies sont invalides.",
-        //     //         'errors' => $exception->errors()
-        //     //     ]);
-        //     // } 
-        // });
+
     }
 
     public function render($request, Throwable $exception)
@@ -63,6 +62,21 @@ class Handler extends ExceptionHandler
         }elseif ($exception instanceof MethodNotAllowedHttpException) {
             return response()->json([
                 "message" => "Cette méthode n'est pas prise en charge pour cette route",
+                'status' => false,
+            ]);
+        }elseif ($exception instanceof TokenInvalidException) {
+            return response()->json([
+                "message" => "Jeton invalide",
+                'status' => false,
+            ]);
+        }elseif ($exception instanceof TokenExpiredException) {
+            return response()->json([
+                "message" => "Le jeton a expiré",
+                'status' => false,
+            ]);
+        }elseif ($exception instanceof JWTException) {
+            return response()->json([
+                "message" => "Jeton non analysé",
                 'status' => false,
             ]);
         }

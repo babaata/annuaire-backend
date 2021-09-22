@@ -56,7 +56,7 @@ class Profil extends Model
 		return $this->hasMany(Competence::class, 'id_profil');
 	}
 
-	public function education()
+	public function educations()
 	{
 		return $this->hasMany(Education::class, 'id_profil');
 	}

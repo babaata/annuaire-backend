@@ -9,27 +9,27 @@ class GestionCertification
 	 * @access public
 	 * @return Response 
 	 */
-	public function all(){
+	public function all($request){
 
 		try {
 
-            $certifications = Certification::all();
+			$certifications = Certification::whereIn('id_profil', function ($query) use ($request){
+	            $query->from('profil')->whereIdUtilisateur($request->user()->id_utilisateur)
+	            ->select('id_profil')->get();
+	        })->with('profil')->get();
 
-            if(is_null($certifications)) return response()->json(['status'=>false, 'message'=>'La liste des certifications est vide'], 200);
-
-            return response()->json([
-				'status'  => true,
-				'content' => $certifications ,
-			], 200);
+	        return response()->json([
+	            'status' => true,
+	            'certifications' => $certifications
+	        ]);
             
         } catch(\Exception $e) {
 
 			return response()->json([
 				'status'  => false,
 				'message' => $e->getMessage() ,
-			], $e->getCode());
+			]);
         }
-
 	}
 
 	/**
@@ -39,25 +39,25 @@ class GestionCertification
 	 * @return Response
 	 * 
 	 */
-	public function find($id){
+	public function find($data, $id){
 
 		try {
 
-            $certification = Certification::find($id);
+			$certifications = Certification::whereIn('id_profil', function ($query) use ($request){
+	            $query->from('profil')->whereIdUtilisateur($request->user()->id_utilisateur)
+	            ->select('id_profil')->get();
+	        })->whereIdCertification($id)->with('profil');
 
-            if(is_null($certification)) return response()->json(['status'=>false, 'message'=>'Oopps certification non trouvée.'], 200);
-
-            return response()->json([
-				'status'  => true,
-				'content' => $certification ,
-			], 200);
+	        return response()->json([
+	            'status' => $certifications->exists(),
+	            'certification' => $certifications->exists() ? $certifications->first():null
+	        ]);
             
         } catch(\Exception $e) {
-
 			return response()->json([
 				'status'  => false,
 				'message' => $e->getMessage() ,
-			], $e->getCode());
+			]);
         }
 	}
 
@@ -69,31 +69,29 @@ class GestionCertification
 	 */
     public function store($data)
 	{
+
 		try {
 
             $certification = Certification::create([
-								'id_profil' => $data->id_profil,
-								'nom' => $data->nom,
-								'organisme_delivrance' => $data->organisme_delivrance,
-                                'level' => $data->level,
-								'date_certification' => $data->date_certification
-							]);
-
-            if(is_null($certification)) return response()->json(['status'=>false, 'message'=>'Oopps une erreur est survenue.'], 200);
+				'id_profil' => $data->profil,
+				'nom' => $data->nom,
+				'organisme_delivrance' => $data->organisme,
+                'level' => $data->level,
+				'date_certification' => $data->date_certification
+			]);
 
             return response()->json([
 				'status' => true,
-				'id' => $certification->id_competence ,
+				'id' => $certification->id_certification,
 				'message' => trans("Certification créée avec succès")
 			]);
-	
             
         } catch(\Exception $e) {
 
 			return response()->json([
 				'status'  => false,
 				'message' => $e->getMessage() ,
-			], $e->getCode());
+			]);
         }
 	}
 
@@ -108,24 +106,28 @@ class GestionCertification
 	{
 		try {
 
-            $certification = Certification::find($id);
-			$status     = false;
+			$certification = Certification::whereIn('id_profil', function ($query) use ($data){
+	            $query->from('profil')->whereIdUtilisateur($data->user()->id_utilisateur)
+	            ->select('id_profil')->get();
+	        })->whereIdCertification($id);
 
-            if(is_null($certification)) return response()->json(['status'=>$status, 'message'=>'Desolee, Cette certification n\'existe pas.'], 200);
-			
-			$certification->update([
-				'id_profil' => $data->id_profil,
-                'nom' => $data->nom,
-                'organisme_delivrance' => $data->organisme_delivrance,
-                'level' => $data->level,
-                'date_certification' => $data->date_certification
-			]);
+	        if ($certification->exists()) {
 
-			$status = true;
+	        	$certification->first()->update([
+					'id_profil' => $data->profil,
+                	'nom' => $data->nom,
+                	'organisme_delivrance' => $data->organisme,
+                	'level' => $data->level,
+                	'date_certification' => $data->date_certification
+				]);
+	        }
 
-            return response()->json([
+	        $status = $certification->exists();
+
+			return response()->json([
 				'status' => $status,
-				'message' => "Certification modifiée avec succès"
+				'id' => $status ? $certification->first()->id_certification:null,
+				'message' => $status ? "Certification modifié avec succès":"Certification invalide"
 			]);
             
         } catch(\Exception $e) {
@@ -133,7 +135,7 @@ class GestionCertification
 			return response()->json([
 				'status'  => false,
 				'message' => $e->getMessage() ,
-			], $e->getCode());
+			]);
         }
 	}
 
@@ -144,21 +146,23 @@ class GestionCertification
 	 * @return Response
 	 * 
 	 */
-	public function delete($id)
+	public function delete($data, $id)
 	{
+
 		try {
 
-            $certification = Certification::find($id);
-			$status     = false;
+			$certification = Certification::whereIn('id_profil', function ($query) use ($data){
+				$query->from('profil')->whereIdUtilisateur($data->user()->id_utilisateur)
+				->select('id_profil')->get();
+			})->whereIdCertification($id);
 
-            if(is_null($certification)) return response()->json(['status'=>$status, 'message'=>'Desolee, Cette certification n\'existe pas.'], 200);
-			
+			$status = $certification->exists();
+
 			$certification->delete();
-			$status = true;
 
             return response()->json([
 				'status' => $status,
-				'message' => "certification supprimée avec succès"
+				'message' => $status ? "Certification supprimée avec succès":"Certification invalide"
 			]);
             
         } catch(\Exception $e) {
@@ -166,7 +170,7 @@ class GestionCertification
 			return response()->json([
 				'status'  => false,
 				'message' => $e->getMessage() ,
-			], $e->getCode());
+			]);
         }
 	}
 }
