@@ -88,6 +88,7 @@ Route::post('/user/login', 'UtilisateurController@login');
 
 //Gestion publique de l'utilisateur
 Route::get('/users', 'UtilisateurController@allUsers');
+Route::get('/users/search', 'UtilisateurController@searchUser');
 
 //Get user by id
 Route::get('/user/{user}', 'UtilisateurController@getBydId');

@@ -170,16 +170,42 @@ class GestionUtilisateur
 				->orWhere('prenom', 'LIKE', "%".$terme."%")->get();
 			});
 		}
-		
-		if ($data->has('limit')) {
-			$users = $users->limit($data->limit)->get();
-		}else{
-			$users = $users->get();
+
+		return response()->json([
+            "status" => true,
+            'users' => $users->limit(8)->get()
+        ]);
+	}
+
+	public function searchUser($data)
+	{
+		$users = Utilisateur::orderBy('date_de_creation')
+			->with('profils.competences')
+			->with('profils.experienceProfessionnelles')
+			->with('profils.educations')
+			->with('langues');
+
+		if ($data->has('competence')) {
+			$terme = $data->competence;
+			$users = $users->whereIn('id_utilisateur', function ($query) use ($terme){
+				$query->from('profil')->whereIn('id_profil', function ($query) use ($terme){
+					$query->from('competence')->where('nom', 'LIKE', "%".$terme."%")
+					->select('id_profil')->get();
+				})->select('id_utilisateur')->get();
+			});
+		}
+
+		if ($data->has('profil')) {
+			$terme = $data->profil;
+			$users = $users->where(function ($query) use ($terme){
+				$query->orWhere('nom', 'LIKE', "%".$terme."%")
+				->orWhere('prenom', 'LIKE', "%".$terme."%")->get();
+			});
 		}
 
 		return response()->json([
             "status" => true,
-            'users' => $users
+            'users' => $users->get()
         ]);
 	}
 
