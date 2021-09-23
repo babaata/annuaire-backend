@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -13,10 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $id_langue
  * @property string $nom
- * @property string|null $niveau
- * @property int $id_utilisateur
  * 
- * @property Utilisateur $utilisateur
+ * @property Collection|Utilisateur[] $utilisateurs
  *
  * @package App\Models
  */
@@ -26,18 +25,13 @@ class Langue extends Model
 	protected $primaryKey = 'id_langue';
 	public $timestamps = false;
 
-	protected $casts = [
-		'id_utilisateur' => 'int'
-	];
-
 	protected $fillable = [
-		'nom',
-		'niveau',
-		'id_utilisateur'
+		'nom'
 	];
 
-	public function utilisateur()
+	public function utilisateurs()
 	{
-		return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
+		return $this->belongsToMany(Utilisateur::class, 'utilisateur_langue', 'id_langue', 'id_utilisateur')
+					->withPivot('niveau');
 	}
 }

@@ -14,27 +14,68 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
+use Carbon\Carbon;
+
 class GestionUtilisateur
 {
 	use SendsPasswordResetEmails;
 
-	public function resetPassword($request)
+	public function resetPassword($data)
 	{
-		$status = true;
+		$status = false;
+
+		$message = "Téléphone invalide";
+
+		$user = Utilisateur::whereTelephone($data->telephone);
+
+		if ($user->exists() AND $user->first()->code_sms) {
+
+			$user = $user->first();
+
+			$from = Carbon::parse($user->date_code_sms);
+			$to = Carbon::parse(now());
+
+			$minute = $to->diffInMinutes($from);
+
+			if ($minute < 60 AND $data->code == $user->code_sms) {
+				$user->update([
+					'password' => Hash::make($data->password),
+					'code_sms' => null,
+					'date_code_sms' => null
+				]);
+
+				$message = "Réinitialisation du mot de passe réussie";
+			}else{
+				$message = "Code de réinitialisation invalide";
+			}
+		}
+
 
         return response()->json([
             "status" => $status,
-            'message' => $status ? "Réinitialisation du mot de passe réussie":"Email invalide"
+            'message' => $message
         ]);
 	}
 
 	public function forgotPassword($data)
 	{
-		$status = true;
+		$status = false;
+
+		$code = generate_otp();
+		$user = Utilisateur::whereTelephone($data->telephone);
+		if ($user->exists()) {
+
+			$user->first()->update([
+				'code_sms' => $code,
+				'date_code_sms' => now()
+			]);
+
+			$status = true;
+		}
 
         return response()->json([
             "status" => $status,
-            'message' => $status ? "Lien de réinitialisation du mot de passe envoyé à votre adresse e-mail":"Email invalide"
+            'message' => $status ? "Le code de réinitialisation du mot de passe envoyé à votre numero de telephone":"Telephone invalide"
         ]);
 	}
 
@@ -153,6 +194,7 @@ class GestionUtilisateur
     protected function respondWithToken($token)
     {
         return response()->json([
+        	//'status' => true,
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
