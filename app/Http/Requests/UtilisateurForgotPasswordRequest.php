@@ -24,7 +24,8 @@ class UtilisateurForgotPasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email',
+            //'telephone' => 'required|phone:AUTO',
+            'telephone' => 'required',
         ];
     }
 }

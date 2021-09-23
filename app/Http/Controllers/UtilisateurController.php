@@ -15,8 +15,8 @@ class UtilisateurController extends Controller
     public function resetPassword(Request $request, GestionUtilisateur $gestion)
     {
         $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
+            'code' => 'required',
+            'telephone' => 'required',
             'password' => 'required|min:8|confirmed',
         ]);
 

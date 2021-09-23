@@ -2,6 +2,10 @@
 
 return [
 
+    'sms_api_client' => env("SMS_API_CLIENT", "mwdWEknX75vocJsSLAHyyRzhlZr5QvcY"),
+
+    'sms_api_secret' => env("SMS_API_SECRET", "L7hHIkNmS3Sda5Pb"),
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
