@@ -4,7 +4,7 @@ namespace App\Gestions;
  * 
  */
 
-use App\Models\{Utilisateur, Profil};
+use App\Models\{Utilisateur, Profil, Competence, ExperienceProfessionnelle};
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -21,11 +21,49 @@ class GestionProfil
 
 		$profil->update(['resume' => $data->resume]);
 
+		$this->addCompetences($data, $profil);
+		$this->addExperiences($data, $profil);
+
 		return response()->json([
 			'status' => true,
 			'id' => $profil->id_profil,
 			'message' => trans("Profil créé avec succès")
 		]);
+	}
+
+	public function addCompetences($data, $profil)
+	{
+		if ($data->has('competences')) {
+
+			foreach ($data->competences as $key => $competence) {
+				Competence::firstOrCreate([
+					'id_profil' => $profil->id_profil,
+					'nom' => $competence,
+					'niveau' => $competence
+				]);
+			}
+		}
+				
+	}
+
+	public function addExperiences($data, $profil)
+	{
+		if ($data->has('experiences')) {
+
+			foreach ($data->experiences as $key => $experience) {
+
+				$exp = ExperienceProfessionnelle::firstOrCreate([
+					'entreprise' => $experience['entreprise'],
+					'poste' => $experience['poste'],
+					'date_debut' => $experience['date']['dateDebut'],
+					'date_fin' => $experience['date']['dateFin'],
+					'description' => $experience['description'],
+					'id_profil' => $profil->id_profil,
+					//'id_type_contrat' => $data->type_contrat
+				]);
+			}
+		}
+				
 	}
 
 	public function update($data, $id)
