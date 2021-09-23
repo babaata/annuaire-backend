@@ -147,20 +147,39 @@ class GestionUtilisateur
 
 	public function allUsers($data)
 	{
-		$users = Utilisateur::whereNotNull('nom');
+		$users = Utilisateur::orderBy('date_de_creation')
+			->with('profils.competences')
+			->with('profils.experienceProfessionnelles')
+			->with('profils.educations')
+			->with('langues');
 
-		if ($data->has('competences')) {
-			// code...
+		if ($data->has('competence')) {
+			$terme = $data->competence;
+			$users = $users->whereIn('id_utilisateur', function ($query) use ($terme){
+				$query->from('profil')->whereIn('id_profil', function ($query) use ($terme){
+					$query->from('competence')->where('nom', 'LIKE', "%".$terme."%")
+					->select('id_profil')->get();
+				})->select('id_utilisateur')->get();
+			});
 		}
 
-		$users = Utilisateur::orderBy('date_de_creation')
-			->with('profils')
-			->with('langues')
-			->limit(20);
+		if ($data->has('profil')) {
+			$terme = $data->profil;
+			$users = $users->where(function ($query) use ($terme){
+				$query->orWhere('nom', 'LIKE', "%".$terme."%")
+				->orWhere('prenom', 'LIKE', "%".$terme."%")->get();
+			});
+		}
+		
+		if ($data->has('limit')) {
+			$users = $users->limit($data->limit)->get();
+		}else{
+			$users = $users->get();
+		}
 
 		return response()->json([
             "status" => true,
-            'users' => $users->get()
+            'users' => $users
         ]);
 	}
 
