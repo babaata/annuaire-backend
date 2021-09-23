@@ -36,6 +36,11 @@ class UtilisateurController extends Controller
         return $gestion->allUsers($request);
     }
 
+    public function searchUser(Request $request, GestionUtilisateur $gestion)
+    {
+        return $gestion->searchUser($request);
+    }
+
     public function saveUserPicture(UserPictureRequest $request, GestionUtilisateur $gestion)
     {
         return $gestion->saveUserPicture($request);
