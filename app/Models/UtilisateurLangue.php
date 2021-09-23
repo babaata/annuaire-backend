@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class UtilisateurLangue
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
 class UtilisateurLangue extends Model
 {
 	protected $table = 'utilisateur_langue';
+	protected $primaryKey = ['id_utilisateur', 'id_langue'];
 	public $incrementing = false;
 	public $timestamps = false;
 
@@ -32,7 +34,9 @@ class UtilisateurLangue extends Model
 	];
 
 	protected $fillable = [
-		'niveau'
+		'niveau',
+		'id_langue',
+		'id_utilisateur'
 	];
 
 	public function langue()
@@ -44,4 +48,12 @@ class UtilisateurLangue extends Model
 	{
 		return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
 	}
+
+	protected function setKeysForSaveQuery($query)
+    {
+        $query
+            ->where('id_utilisateur', '=', $this->getAttribute('id_utilisateur'))
+            ->where('id_langue', '=', $this->getAttribute('id_langue'));
+        return $query;
+    }
 }

@@ -24,7 +24,7 @@ class LangueCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'nom' => 'required|max:255',
+            'langue' => 'required|integer',
             'niveau' => 'nullable|max:255'
         ];
     }

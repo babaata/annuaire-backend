@@ -4,7 +4,7 @@ namespace App\Gestions;
  * 
  */
 
-use App\Models\{Utilisateur, Profil, Langue};
+use App\Models\{Utilisateur, Profil, Langue, UtilisateurLangue, UtilisateurLangue};
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -12,14 +12,16 @@ class GestionLangue
 {	
 	public function store($data)
 	{
-		$langue = Langue::firstOrCreate([
-			'nom' => $data->nom,
+		$langue = UtilisateurLangue::firstOrCreate([
+			'id_langue' => $data->langue,
 			'id_utilisateur' => $data->user()->id_utilisateur
 		]);
 
+		$langue->update(['niveau' => $data->niveau]);
+
 		return response()->json([
 			'status' => true,
-			'id' => $langue->id_langue,
+			'langue' => $langue,
 			'message' => trans("Langue créé avec succès")
 		]);
 	}
@@ -30,21 +32,25 @@ class GestionLangue
 
 		if ($langues->exists()) {
 			
-			$langues->first()->update([
-				'nom' => $data->nom,
+			$langue = UtilisateurLangue::firstOrCreate([
+				'id_langue' => $langues->first()->id_langue,
+				'id_utilisateur' => $data->user()->id_utilisateur
 			]);
+
+			$langue->update(['niveau' => $data->niveau]);
 		}
 
 		return response()->json([
 			'status' => $langues->exists(),
-			'id' => $langues->exists() ? $langues->first()->id_langue:null,
+			'langue' => $langues->exists() ? $langues->first():null,
 			'message' => $status ? "Langue modifié avec succès":"Langue invalide"
 		]);
 	}
 
 	public function delete($data, $id)
 	{
-		$langues = $data->user()->profils()->whereIdLangue($id);
+		$langues = UtilisateurLangue::whereIdUtilisateur($data->user()->id_utilisateur)
+		->whereIdLangue($id);
 
 		if ($langues->exists()) $langues->first()->delete();
 

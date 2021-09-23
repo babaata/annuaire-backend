@@ -10,13 +10,11 @@ use App\Models\{Utilisateur, Profil};
 
 class UtilisateurController extends Controller
 {
-    
-
     public function resetPassword(Request $request, GestionUtilisateur $gestion)
     {
         $request->validate([
             'code' => 'required',
-            'telephone' => 'required',
+            'email' => 'required|email',
             'password' => 'required|min:8|confirmed',
         ]);
 
@@ -33,9 +31,9 @@ class UtilisateurController extends Controller
         return $gestion->getBydId($user);
     }
 
-    public function allUsers(GestionUtilisateur $gestion, $limit = 10)
+    public function allUsers(Request $request, GestionUtilisateur $gestion)
     {
-        return $gestion->allUsers($limit);
+        return $gestion->allUsers($request);
     }
 
     public function saveUserPicture(UserPictureRequest $request, GestionUtilisateur $gestion)
