@@ -156,7 +156,7 @@ class GestionUtilisateur
 		$users = Utilisateur::orderBy('date_de_creation')
 			->with('profils')
 			->with('langues')
-			->limit($limit);
+			->limit(20);
 
 		return response()->json([
             "status" => true,
