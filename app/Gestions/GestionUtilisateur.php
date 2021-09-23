@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
+use App\Mail\SendMail;
+use App\Models\Order;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+
 use Carbon\Carbon;
 
 class GestionUtilisateur
@@ -24,11 +29,11 @@ class GestionUtilisateur
 	{
 		$status = false;
 
-		$message = "Téléphone invalide";
+		$message = "Email invalide";
 
-		$user = Utilisateur::whereTelephone($data->telephone);
+		$user = Utilisateur::whereCodeSms($data->code);
 
-		if ($user->exists() AND $user->first()->code_sms) {
+		if ($user->exists()) {
 
 			$user = $user->first();
 
@@ -62,7 +67,7 @@ class GestionUtilisateur
 		$status = false;
 
 		$code = generate_otp();
-		$user = Utilisateur::whereTelephone($data->telephone);
+		$user = Utilisateur::whereEmail($data->email);
 		if ($user->exists()) {
 
 			$user->first()->update([
@@ -70,12 +75,19 @@ class GestionUtilisateur
 				'date_code_sms' => now()
 			]);
 
-			$status = true;
+			try {
+				Mail::to($data->email)->send(new SendMail($data->email, $code));
+				$status = true;
+			} catch (\Swift_TransportException $e) {
+				$status = false;
+			}
+
+			
 		}
 
         return response()->json([
             "status" => $status,
-            'message' => $status ? "Le code de réinitialisation du mot de passe envoyé à votre numero de telephone":"Telephone invalide"
+            'message' => $status ? "Le code de réinitialisation du mot de passe envoyé à votre adresse email":"Email invalide"
         ]);
 	}
 
@@ -133,8 +145,14 @@ class GestionUtilisateur
         ]);
 	}
 
-	public function allUsers($limit = 10)
+	public function allUsers($data)
 	{
+		$users = Utilisateur::whereNotNull('nom');
+
+		if ($data->has('competences')) {
+			// code...
+		}
+
 		$users = Utilisateur::orderBy('date_de_creation')
 			->with('profils')
 			->with('langues')
