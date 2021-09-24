@@ -72,6 +72,7 @@ Route::group([
     
     //endpoint user
     Route::post('/user/picture', 'UtilisateurController@saveUserPicture');
+    Route::get('/user/me', 'UtilisateurController@getMe');
 
     //Logout endpoint
     Route::any('/user/logout', 'UtilisateurController@logout');

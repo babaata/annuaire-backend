@@ -25,6 +25,19 @@ class GestionUtilisateur
 {
 	use SendsPasswordResetEmails;
 
+	public function getMe($data)
+	{
+		$user = $data->user()->with('profils.competences')
+			->with('profils.experienceProfessionnelles')
+			->with('profils.educations')
+			->with('langues')->first();
+
+		return response()->json([
+            "status" => true,
+            'user' => $user
+        ]);
+	}
+
 	public function resetPassword($data)
 	{
 		$status = false;
@@ -50,11 +63,12 @@ class GestionUtilisateur
 				]);
 
 				$message = "Réinitialisation du mot de passe réussie";
+
+				$status = true;
 			}else{
 				$message = "Code de réinitialisation invalide";
 			}
 		}
-
 
         return response()->json([
             "status" => $status,
@@ -200,6 +214,8 @@ class GestionUtilisateur
 			->with('profils.educations')
 			->with('langues');
 
+		$query = false;
+
 		if ($data->has('competence')) {
 			$terme = $data->competence;
 			$users = $users->whereIn('id_utilisateur', function ($query) use ($terme){
@@ -208,6 +224,8 @@ class GestionUtilisateur
 					->select('id_profil')->get();
 				})->select('id_utilisateur')->get();
 			});
+
+			$query = true;
 		}
 
 		if ($data->has('profil')) {
@@ -216,11 +234,13 @@ class GestionUtilisateur
 				$query->orWhere('nom', 'LIKE', "%".$terme."%")
 				->orWhere('prenom', 'LIKE', "%".$terme."%")->get();
 			});
+
+			$query = true;
 		}
 
 		return response()->json([
             "status" => true,
-            'users' => $users->get()
+            'users' => $query ? $users->get():[]
         ]);
 	}
 
