@@ -29,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
     {
         //create_controllers();
 
+        update_user();
+
         Schema::defaultStringLength(191);
 
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);

@@ -3,6 +3,25 @@ use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Mediumart\Orange\SMS\SMS;
 use Mediumart\Orange\SMS\Http\SMSClient;
+use App\Models\{Utilisateur};
+use App\Gestions\{GestionUtilisateur};
+
+function update_user(){
+	$users = Utilisateur::get();
+
+	$gestion = new GestionUtilisateur();
+
+	foreach ($users as $key => $user) {
+		$username = $gestion->createUserName($user->nom, $user->prenom);
+		if (!$user->nom_utilisateur) {
+			$user->update(['nom_utilisateur' => $username]);
+		}
+
+		if (!$user->url_photo) {
+			$user->update(['url_photo' => asset('default.jpg')]);
+		}
+	}
+}
 
 function create_fk($table, $table_name, $nullable = false){
 	if ($nullable) {
