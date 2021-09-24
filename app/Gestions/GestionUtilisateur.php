@@ -230,7 +230,7 @@ class GestionUtilisateur
 
 		if ($data->has('profil')) {
 			$terme = $data->profil;
-			$users = $users->where(function ($query) use ($terme){
+			$users = $users->orWhere(function ($query) use ($terme){
 				$query->orWhere('nom', 'LIKE', "%".$terme."%")
 				->orWhere('prenom', 'LIKE', "%".$terme."%")->get();
 			});
