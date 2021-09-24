@@ -23,9 +23,19 @@ class CompetenceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function statistiques(Request $request, GestionCompetence $gestion)
     {
-        //
+        return $gestion->statistiques($request);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Request $request, GestionCompetence $gestion)
+    {
+        return $gestion->extrais($request);
     }
 
     /**

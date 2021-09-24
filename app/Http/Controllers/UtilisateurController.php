@@ -41,6 +41,11 @@ class UtilisateurController extends Controller
         return $gestion->searchUser($request);
     }
 
+    public function userPagination(Request $request, GestionUtilisateur $gestion)
+    {
+        return $gestion->userPagination($request);
+    }
+
     public function saveUserPicture(UserPictureRequest $request, GestionUtilisateur $gestion)
     {
         return $gestion->saveUserPicture($request);
