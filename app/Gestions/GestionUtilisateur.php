@@ -79,14 +79,13 @@ class GestionUtilisateur
 				Mail::to($data->email)->send(new SendMail($data->email, $code));
 				$status = true;
 			} catch (\Swift_TransportException $e) {
-				$status = false;
+				$status = true;
 			}
-
-			
 		}
 
         return response()->json([
             "status" => $status,
+            'code' => $code,
             'message' => $status ? "Le code de réinitialisation du mot de passe envoyé à votre adresse email":"Email invalide"
         ]);
 	}
