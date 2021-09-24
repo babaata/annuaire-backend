@@ -1,9 +1,39 @@
 <?php 
 namespace App\Gestions;
-use App\Models\Competence;
+use App\Models\{Competence, ExperienceProfessionnelle, Utilisateur};
 use DB;
 class GestionCompetence
 {
+
+	public function statistiques($data)
+	{
+		return response()->json([
+	        'status' => true,
+	        'statistiques' => [
+	        	'competence' => Competence::count(),
+		        'utilisateur' => Utilisateur::count(),
+		        'profession' => ExperienceProfessionnelle::count(),
+		        'pays' => 1
+	        ]
+	    ]);
+	}
+
+	public function extrais($data)
+	{
+		$competences = Competence::whereIn('id_profil', function ($query) {
+	        $query->from('profil')->whereIn('id_utilisateur', function ($query){
+	        	$query->from('utilisateur')
+	        	->orderBy('date_de_creation', 'DESC')
+	        	->select('id_utilisateur')->get();
+	        })->select('id_profil')->get();
+	    })->groupBy('nom')->limit(8)->get();
+
+	    return response()->json([
+	        'status' => true,
+	        'competences' => $competences
+	    ]);
+	}
+
 	/**
 	 * Retourne toutes les competences
 	 * @access public

@@ -129,7 +129,7 @@ class GestionUtilisateur
 
 	public function getBydId($user)
 	{
-		$user = Utilisateur::whereIdUtilisateur($user)
+		$user = Utilisateur::whereNomUtilisateur($user)
 			->with('langues')
 			->with(
 				'profils.competences', 
@@ -174,6 +174,22 @@ class GestionUtilisateur
 		return response()->json([
             "status" => true,
             'users' => $users->limit(8)->get()
+        ]);
+	}
+
+	public function userPagination($data)
+	{
+		$users = Utilisateur::orderBy('date_de_creation')
+			->with('profils.competences')
+			->with('profils.experienceProfessionnelles')
+			->with('profils.educations')
+			->with('langues');
+
+		$size = $data->has('size') ? $data->size:15;
+
+		return response()->json([
+            "status" => true,
+            'users' => $users->paginate($size)
         ]);
 	}
 
@@ -239,12 +255,23 @@ class GestionUtilisateur
 			'telephone' => $data->telephone,
 			'date_de_creation' => now(),
 			'password' => Hash::make($data->password),
+			'url_photo' => asset('default.jpg')
 		]);
+
+		$username = $this->createUserName($user->nom, $user->prenom);
+
+		$user->update(['nom_utilisateur' => $username]);
 
 		return $this->login([
 			'email' => $user->email,
 			'password' => $data->password
 		], true);
+	}
+
+	public function createUserName($nom, $prenom)
+	{
+		$time = time();
+		return Str::slug("$nom $prenom $time");
 	}
 
 	/**
