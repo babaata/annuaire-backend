@@ -31,6 +31,11 @@ class UtilisateurController extends Controller
         return $gestion->getBydId($user);
     }
 
+    public function getMe(Request $request, GestionUtilisateur $gestion)
+    {
+        return $gestion->getMe($request);
+    }
+
     public function allUsers(Request $request, GestionUtilisateur $gestion)
     {
         return $gestion->allUsers($request);
