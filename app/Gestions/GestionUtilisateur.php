@@ -255,10 +255,12 @@ class GestionUtilisateur
 		if ($status = $data->file('image')->isValid()) {
             
             //store file into users pictures folder
-            $image = $data->image->store('public/users');
+            $name = (string) Str::uuid();
+            $extension = $data->image->extension();
+            $path = $image->storeAs('public/users', "$name.$extension", 'local');
 
             $data->user()->update([
-            	'url_photo' => asset(Storage::url($image))
+            	'url_photo' => asset(Storage::url($path))
             ]);
         }
 
