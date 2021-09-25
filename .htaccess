@@ -10,7 +10,7 @@ AddType text/cache-manifest .appcache
     RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
     # serve existing files in the /public folder as if they were in /
-    RewriteCond /home/evilwrer/babaata/public%{REQUEST_URI} -f
+    RewriteCond /home/evilwrer/babaata.eviltech.org/public%{REQUEST_URI} -f
     RewriteRule (.+) /public/$1 [L]
 
     # route everything else to /public/index.php
