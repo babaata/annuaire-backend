@@ -23,6 +23,8 @@ class SendMail extends Mailable
     {
         $this->email = $email;
         $this->code = $code;
+
+        $this->subject("Processus de réinitialisation du mot de passe");
     }
 
     /**
@@ -34,6 +36,7 @@ class SendMail extends Mailable
     {
         return $this->from('noreply@babaata.org')->markdown('emails.password.reset', [
             'email' => $this->email,
+            'code' => $this->code
         ]);
     }
 }

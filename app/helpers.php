@@ -3,8 +3,27 @@ use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Mediumart\Orange\SMS\SMS;
 use Mediumart\Orange\SMS\Http\SMSClient;
-use App\Models\{Utilisateur};
+use App\Models\{Utilisateur, Langue};
 use App\Gestions\{GestionUtilisateur};
+
+function create_langues(){
+	$langues = [
+		"Francais",
+		"Anglais",
+		"Arabe",
+		"Chinois",
+		"Russe",
+		"Espagnol",
+		"Portugais",
+		"Malinke",
+		"Soussou",
+		"Pular"
+	];
+
+	foreach ($langues as $key => $langue) {
+		Langue::firstOrCreate(['nom' => $langue]);
+	}
+}
 
 function update_user(){
 	$users = Utilisateur::get();
