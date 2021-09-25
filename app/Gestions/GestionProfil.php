@@ -19,6 +19,8 @@ class GestionProfil
 			'id_utilisateur' => $data->user()->id_utilisateur
 		]);
 
+		$user->update(['id_profil' => $profil->id_profil]);
+
 		$profil->update(['resume' => $data->resume]);
 
 		$this->addCompetences($data, $profil);
