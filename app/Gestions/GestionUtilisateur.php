@@ -1,7 +1,7 @@
-<?php 
+<?php
 namespace App\Gestions;
 /**
- * 
+ *
  */
 
 use App\Models\{Utilisateur, Profil, UtilisateurLangue, Langue};
@@ -161,8 +161,8 @@ class GestionUtilisateur
 		$user = Utilisateur::whereNomUtilisateur($user)
 			->with('langues')
 			->with(
-				'profil.competences', 
-				'profil.educations', 
+				'profil.competences',
+				'profil.educations',
 				'profil.certifications',
 				'profil.experienceProfessionnelles',
 			);
@@ -224,9 +224,11 @@ class GestionUtilisateur
 
 	public function searchUser($data)
 	{
-		$competence = ($data->has('competence') AND !empty($data->competence)) ? $data->competence:"@#&*";
-		$profil = ($data->has('profession') AND !empty($data->profession)) ? $data->profession:"@#&*";
-		$pays = ($data->has('profeays') AND !empty($data->profeays)) ? $data->profeays:"@#&*";
+        $req= $data->request;
+
+		$competence = ($data->has('competences') AND !empty($data->competences)) ? $req->get('competences') : "@#&*";
+		$profil = ($data->has('profession') AND !empty($data->profession)) ? $req->get('profession') : "@#&*";
+		$pays = ($data->has('pays') AND !empty($data->pays)) ? $req->get('pays') : "@#&*";
 
 		$users = Utilisateur::whereIn('id_utilisateur', function ($query) use ($competence){
 			$query->from('profil')->whereIn('id_profil', function ($query) use ($competence){
@@ -253,7 +255,7 @@ class GestionUtilisateur
 		$status = false;
 		$image = null;
 		if ($status = $data->file('image')->isValid()) {
-            
+
             //store file into users pictures folder
             $name = (string) Str::uuid();
             $extension = $data->image->extension();
@@ -270,7 +272,7 @@ class GestionUtilisateur
             "image" => $data->user()->url_photo
         ]);
 	}
-	
+
 	public function store($data)
 	{
 		$user = Utilisateur::create([
