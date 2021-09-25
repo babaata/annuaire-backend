@@ -23,6 +23,9 @@ class GestionProfil
 
 		$profil->update(['resume' => $data->resume]);
 
+		$profil->experienceProfessionnelles()->delete();
+		$profil->competences()->delete();
+
 		$this->addCompetences($data, $profil);
 		$this->addExperiences($data, $profil);
 
