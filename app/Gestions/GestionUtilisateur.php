@@ -4,7 +4,7 @@ namespace App\Gestions;
  * 
  */
 
-use App\Models\{Utilisateur, Profil};
+use App\Models\{Utilisateur, Profil, UtilisateurLangue, Langue};
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -27,10 +27,11 @@ class GestionUtilisateur
 
 	public function getMe($data)
 	{
-		$user = $data->user()->with('profils.competences')
+		$user = $data->user()
+			->with('profils.competences')
 			->with('profils.experienceProfessionnelles')
 			->with('profils.educations')
-			->with('langues')->first();
+			->with('langues')->get()->find($data->user()->id_utilisateur);
 
 		return response()->json([
             "status" => true,
@@ -133,11 +134,27 @@ class GestionUtilisateur
 			'date_de_modification' => now(),
 		]);
 
+		if ($data->has('langues')) {
+			$this->setLangues($data);
+		}
+
 		return response()->json([
             "status" => true,
             'message' => "Profil modifié avec succès",
             'user' => $data->user(),
         ]);
+	}
+
+	public function setLangues($data)
+	{
+		foreach ($data->langues as $key => $langue) {
+			if (Langue::find($langue)){
+				UtilisateurLangue::firstOrCreate([
+					'id_langue' => $langue,
+					'id_utilisateur' => $data->user()->id_utilisateur
+				]);
+			}
+		}
 	}
 
 	public function getBydId($user)
@@ -160,7 +177,7 @@ class GestionUtilisateur
 
 	public function allUsers($data)
 	{
-		$users = Utilisateur::orderBy('date_de_creation')
+		$users = Utilisateur::orderBy('date_de_creation', 'DESC')
 			->with('profils.competences')
 			->with('profils.experienceProfessionnelles')
 			->with('profils.educations')
@@ -192,7 +209,7 @@ class GestionUtilisateur
 
 	public function userPagination($data)
 	{
-		$users = Utilisateur::orderBy('date_de_creation')
+		$users = Utilisateur::orderBy('date_de_creation', 'DESC')
 			->with('profils.competences')
 			->with('profils.experienceProfessionnelles')
 			->with('profils.educations')
@@ -208,39 +225,27 @@ class GestionUtilisateur
 
 	public function searchUser($data)
 	{
-		$users = Utilisateur::orderBy('date_de_creation')
-			->with('profils.competences')
-			->with('profils.experienceProfessionnelles')
-			->with('profils.educations')
-			->with('langues');
+		$competence = ($data->has('competence') AND !empty($data->competence)) ? $data->competence:"@#&*";
+		$profil = ($data->has('profession') AND !empty($data->profession)) ? $data->profession:"@#&*";
+		$pays = ($data->has('profeays') AND !empty($data->profeays)) ? $data->profeays:"@#&*";
 
-		$query = false;
-
-		if ($data->has('competence')) {
-			$terme = $data->competence;
-			$users = $users->whereIn('id_utilisateur', function ($query) use ($terme){
-				$query->from('profil')->whereIn('id_profil', function ($query) use ($terme){
-					$query->from('competence')->where('nom', 'LIKE', "%".$terme."%")
-					->select('id_profil')->get();
-				})->select('id_utilisateur')->get();
-			});
-
-			$query = true;
-		}
-
-		if ($data->has('profil')) {
-			$terme = $data->profil;
-			$users = $users->orWhere(function ($query) use ($terme){
-				$query->orWhere('nom', 'LIKE', "%".$terme."%")
-				->orWhere('prenom', 'LIKE', "%".$terme."%")->get();
-			});
-
-			$query = true;
-		}
+		$users = Utilisateur::whereIn('id_utilisateur', function ($query) use ($competence){
+			$query->from('profil')->whereIn('id_profil', function ($query) use ($competence){
+				$query->from('competence')->where('nom', 'LIKE', $competence."%")->select('id_profil')->get();
+			})->select('id_utilisateur')->get();
+		})->orWhereIn('id_utilisateur', function ($query) use ($profil){
+			$query->from('profil')->where('titre', 'LIKE', $profil."%")->select('id_utilisateur')->get();
+		})->orWhereIn('id_pays', function ($query) use ($pays){
+			$query->from('pays')->where('nom', 'LIKE', $pays."%")->select('id_pays')->get();
+		})->orderBy('date_de_creation', 'DESC')
+		->with('profils.competences')
+		->with('profils.experienceProfessionnelles')
+		->with('profils.educations')
+		->with('langues')->get();
 
 		return response()->json([
             "status" => true,
-            'users' => $query ? $users->get():[]
+            'users' => $users
         ]);
 	}
 
@@ -289,8 +294,8 @@ class GestionUtilisateur
 
 	public function createUserName($nom, $prenom)
 	{
-		$time = time();
-		return Str::slug("$nom $prenom $time");
+		$count = Utilisateur::count()+1;
+		return Str::slug("$nom $prenom $count");
 	}
 
 	/**
@@ -306,7 +311,7 @@ class GestionUtilisateur
         	//'status' => true,
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
+            'expires_in' => auth()->factory()->getTTL() * 43200,
             'user' => auth()->user()
         ]);
     }

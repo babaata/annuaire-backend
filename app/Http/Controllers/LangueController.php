@@ -14,16 +14,7 @@ class LangueController extends Controller
     {
         return response()->json([
             'status' => true,
-            'langues' => [
-                'Koniake',
-                'Malinke',
-                'Soussous',
-                'Pular',
-                'Anglais',
-                'Français',
-                'Espanol',
-                'Russe'
-            ]
+            'langues' => Langue::get()
         ]);
     }
     /**

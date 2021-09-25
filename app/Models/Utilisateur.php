@@ -85,8 +85,14 @@ class Utilisateur extends Authenticatable implements JWTSubject
 		'password',
 		'api_token',
 		'code_sms',
-		'date_code_sms'
+		'date_code_sms',
+		'id_pays'
 	];
+
+	public function pays()
+	{
+		return $this->belongsTo(Pays::class, 'id_pays');
+	}
 
 	public function profils()
 	{
