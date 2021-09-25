@@ -28,9 +28,9 @@ class GestionUtilisateur
 	public function getMe($data)
 	{
 		$user = $data->user()
-			->with('profils.competences')
-			->with('profils.experienceProfessionnelles')
-			->with('profils.educations')
+			->with('profil.competences')
+			->with('profil.experienceProfessionnelles')
+			->with('profil.educations')
 			->with('langues')->get()->find($data->user()->id_utilisateur);
 
 		return response()->json([
@@ -162,10 +162,10 @@ class GestionUtilisateur
 		$user = Utilisateur::whereNomUtilisateur($user)
 			->with('langues')
 			->with(
-				'profils.competences', 
-				'profils.educations', 
-				'profils.certifications',
-				'profils.experienceProfessionnelles',
+				'profil.competences', 
+				'profil.educations', 
+				'profil.certifications',
+				'profil.experienceProfessionnelles',
 			);
 
 		return response()->json([
@@ -178,9 +178,9 @@ class GestionUtilisateur
 	public function allUsers($data)
 	{
 		$users = Utilisateur::orderBy('date_de_creation', 'DESC')
-			->with('profils.competences')
-			->with('profils.experienceProfessionnelles')
-			->with('profils.educations')
+			->with('profil.competences')
+			->with('profil.experienceProfessionnelles')
+			->with('profil.educations')
 			->with('langues');
 
 		if ($data->has('competence')) {
@@ -210,9 +210,9 @@ class GestionUtilisateur
 	public function userPagination($data)
 	{
 		$users = Utilisateur::orderBy('date_de_creation', 'DESC')
-			->with('profils.competences')
-			->with('profils.experienceProfessionnelles')
-			->with('profils.educations')
+			->with('profil.competences')
+			->with('profil.experienceProfessionnelles')
+			->with('profil.educations')
 			->with('langues');
 
 		$size = $data->has('size') ? $data->size:15;
@@ -238,9 +238,9 @@ class GestionUtilisateur
 		})->orWhereIn('id_pays', function ($query) use ($pays){
 			$query->from('pays')->where('nom', 'LIKE', $pays."%")->select('id_pays')->get();
 		})->orderBy('date_de_creation', 'DESC')
-		->with('profils.competences')
-		->with('profils.experienceProfessionnelles')
-		->with('profils.educations')
+		->with('profil.competences')
+		->with('profil.experienceProfessionnelles')
+		->with('profil.educations')
 		->with('langues')->get();
 
 		return response()->json([
@@ -355,4 +355,4 @@ class GestionUtilisateur
         return $this->respondWithToken(auth()->refresh());
     }
 }
- ?>
+?>
