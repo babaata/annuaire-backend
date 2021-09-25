@@ -107,3 +107,5 @@ Route::get('/type-contrats', 'TypeContratController@index');
 Route::get('/competences', 'CompetenceController@create');
 Route::get('/statistiques', 'CompetenceController@statistiques');
 
+Route::get('/pays', 'PaysController@index');
+
