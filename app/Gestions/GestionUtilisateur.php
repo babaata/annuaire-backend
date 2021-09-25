@@ -257,7 +257,7 @@ class GestionUtilisateur
             //store file into users pictures folder
             $name = (string) Str::uuid();
             $extension = $data->image->extension();
-            $path = $image->storeAs('public/users', "$name.$extension", 'local');
+            $path = $data->image->storeAs('public/users', "$name.$extension", 'local');
 
             $data->user()->update([
             	'url_photo' => asset(Storage::url($path))
