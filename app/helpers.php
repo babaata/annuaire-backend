@@ -39,10 +39,10 @@ function update_user(){
 		$user->update(['nom_utilisateur' => $username]);
 
 		if (!$user->url_photo) {
-			$user->update(['url_photo' => asset('default.jpg')]);
+			$user->update(['url_photo' => asset('/public/default.jpg')]);
 		}
 
-		$user->update(['url_photo' => asset('default.jpg')]);
+		$user->update(['url_photo' => asset('/public/default.jpg')]);
 	}
 }
 

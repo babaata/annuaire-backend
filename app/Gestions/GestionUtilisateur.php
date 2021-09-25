@@ -278,7 +278,7 @@ class GestionUtilisateur
 			'telephone' => $data->telephone,
 			'date_de_creation' => now(),
 			'password' => Hash::make($data->password),
-			'url_photo' => asset('default.jpg')
+			'url_photo' => asset('public/default.jpg')
 		]);
 
 		$username = $this->createUserName($user->nom, $user->prenom);
