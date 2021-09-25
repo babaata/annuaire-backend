@@ -29,7 +29,9 @@ class AppServiceProvider extends ServiceProvider
     {
         //create_controllers();
 
-        update_user();
+        //update_user();
+
+        create_langues();
 
         Schema::defaultStringLength(191);
 

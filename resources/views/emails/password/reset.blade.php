@@ -1,12 +1,10 @@
 @component('mail::message')
-# Introduction
+# Processus de réinitialisation du mot de passe
 
-The body of your message.
+Veuillez utiliser ce code pour réinitialiser votre mot de passe
 
-@component('mail::button', ['url' => ''])
-Button Text
-@endcomponent
+<h2 style="text-align: center;">{{ $code }}</h2>
 
-Thanks,<br>
+Merci,<br>
 {{ config('app.name') }}
 @endcomponent
