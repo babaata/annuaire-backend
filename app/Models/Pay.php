@@ -10,28 +10,29 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Langue
+ * Class Pay
  * 
- * @property int $id_langue
+ * @property int $id_pays
  * @property string $nom
+ * @property string|null $code_pays
  * 
  * @property Collection|Utilisateur[] $utilisateurs
  *
  * @package App\Models
  */
-class Langue extends Model
+class Pay extends Model
 {
-	protected $table = 'langue';
-	protected $primaryKey = 'id_langue';
+	protected $table = 'pays';
+	protected $primaryKey = 'id_pays';
 	public $timestamps = false;
 
 	protected $fillable = [
-		'nom'
+		'nom',
+		'code_pays'
 	];
 
 	public function utilisateurs()
 	{
-		return $this->belongsToMany(Utilisateur::class, 'utilisateur_langue', 'id_langue', 'id_utilisateur')
-					->withPivot('niveau');
+		return $this->hasMany(Utilisateur::class, 'id_pays');
 	}
 }

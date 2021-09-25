@@ -83,12 +83,21 @@ class Utilisateur extends Authenticatable implements JWTSubject
 		'date_de_desactivation',
 		'url_photo',
 		'password',
-		'api_token'
+		'api_token',
+		'code_sms',
+		'date_code_sms',
+		'id_pays',
+		'id_profil'
 	];
 
-	public function profils()
+	public function pays()
 	{
-		return $this->hasMany(Profil::class, 'id_utilisateur');
+		return $this->belongsTo(Pays::class, 'id_pays');
+	}
+
+	public function profil()
+	{
+		return $this->belongsTo(Profil::class, 'id_profil');
 	}
 
 	public function roles()
@@ -98,7 +107,7 @@ class Utilisateur extends Authenticatable implements JWTSubject
 
 	public function langues()
 	{
-		return $this->hasMany(Langue::class, 'id_utilisateur');
+		return $this->belongsToMany(Langue::class, 'utilisateur_langue', 'id_utilisateur', 'id_langue')->withPivot('niveau');
 	}
 
 	public function refreshToken()

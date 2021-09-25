@@ -66,17 +66,17 @@ class Handler extends ExceptionHandler
             ]);
         }elseif ($exception instanceof TokenInvalidException) {
             return response()->json([
-                "message" => "Jeton invalide",
+                "message" => "Vous n'avez pas l'autorisation nécessaire pour accéder à cette page",
                 'status' => false,
             ]);
         }elseif ($exception instanceof TokenExpiredException) {
             return response()->json([
-                "message" => "Le jeton a expiré",
+                "message" => "Vous n'avez pas l'autorisation nécessaire pour accéder à cette page",
                 'status' => false,
             ]);
         }elseif ($exception instanceof JWTException) {
             return response()->json([
-                "message" => "Jeton non analysé",
+                "message" => "Vous n'avez pas l'autorisation nécessaire pour accéder à cette page",
                 'status' => false,
             ]);
         }

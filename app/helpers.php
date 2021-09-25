@@ -1,7 +1,50 @@
 <?php
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
-//use Artisan;
+use Mediumart\Orange\SMS\SMS;
+use Mediumart\Orange\SMS\Http\SMSClient;
+use App\Models\{Utilisateur, Langue};
+use App\Gestions\{GestionUtilisateur};
+
+function create_langues(){
+	$langues = [
+		"Francais",
+		"Anglais",
+		"Arabe",
+		"Chinois",
+		"Russe",
+		"Espagnol",
+		"Portugais",
+		"Malinke",
+		"Soussou",
+		"Pular"
+	];
+
+	foreach ($langues as $key => $langue) {
+		Langue::firstOrCreate(['nom' => $langue]);
+	}
+}
+
+function update_user(){
+	$users = Utilisateur::get();
+
+	$gestion = new GestionUtilisateur();
+
+	foreach ($users as $key => $user) {
+		$username = $gestion->createUserName($user->nom, $user->prenom);
+		if (!$user->nom_utilisateur) {
+			$user->update(['nom_utilisateur' => $username]);
+		}
+
+		$user->update(['nom_utilisateur' => $username]);
+
+		if (!$user->url_photo) {
+			$user->update(['url_photo' => asset('/public/default.jpg')]);
+		}
+
+		$user->update(['url_photo' => asset('/public/default.jpg')]);
+	}
+}
 
 function create_fk($table, $table_name, $nullable = false){
 	if ($nullable) {
@@ -11,6 +54,18 @@ function create_fk($table, $table_name, $nullable = false){
 	}
 	
     $table->foreign("id_$table_name")->references("id_$table_name")->on($table_name)->onDelete('cascade')->onUpdate('cascade');
+}
+
+function send_sms($message, $telephone)
+{
+	try {
+		$client = SMSClient::getInstance(config('app.sms_api_client'), config('app.sms_api_secret'));
+		$sms = new SMS($client);
+		$sms->message($message)->from('+224627044179')->to($telephone)->send();
+		return true;
+	} catch (\GuzzleHttp\Exception\ConnectException $e) {
+		return false;
+	}
 }
 
 function models(){
@@ -99,7 +154,7 @@ function dateFormat($date, $type = 'table'){
 
 
 function generate_otp($n = 6) {
-    $generator = "1357902468ABCDEF";
+    $generator = "1357902468";
   
     $result = ""; 
   
