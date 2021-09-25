@@ -55,8 +55,8 @@ class GestionProfil
 				$exp = ExperienceProfessionnelle::firstOrCreate([
 					'entreprise' => $experience['entreprise'],
 					'poste' => $experience['poste'],
-					'date_debut' => $experience['date']['dateDebut'],
-					'date_fin' => $experience['date']['dateFin'],
+					'date_debut' => $experience['dateDebut'],
+					'date_fin' => $experience['dateFin'],
 					'description' => $experience['description'],
 					'id_profil' => $profil->id_profil,
 					//'id_type_contrat' => $data->type_contrat
