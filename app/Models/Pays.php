@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Models
  */
-class Pay extends Model
+class Pays extends Model
 {
 	protected $table = 'pays';
 	protected $primaryKey = 'id_pays';
@@ -28,7 +28,8 @@ class Pay extends Model
 
 	protected $fillable = [
 		'nom',
-		'code_pays'
+		'alpha2',
+		'alpha3'
 	];
 
 	public function utilisateurs()
