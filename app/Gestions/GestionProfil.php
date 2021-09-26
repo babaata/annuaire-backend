@@ -14,7 +14,7 @@ class GestionProfil
 	{
 		$user = $data->user();
 
-		//$data->user()->profil()->delete();
+		$data->user()->profil()->delete();
 
 		$profil = Profil::firstOrCreate([
 			'id_utilisateur' => $data->user()->id_utilisateur
