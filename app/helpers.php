@@ -165,4 +165,16 @@ function generate_otp($n = 6) {
     return $result; 
 }
 
+function optimize_image($path){
+	$img = storage_path("app/$path");
+    try {
+        \Tinify\setKey("RMwUrt0pxypvC9IX6y4Mg8FFLTW6HPAw");
+        $source = \Tinify\fromFile($img);
+
+       	$source->toFile($img);
+    } catch (\Tinify\Exception $e) {
+        return false;
+    }
+}
+
 ?>
