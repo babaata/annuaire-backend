@@ -14,17 +14,18 @@ class GestionProfil
 	{
 		$user = $data->user();
 
+		$data->user()->profil()->delete();
+
 		$profil = Profil::firstOrCreate([
-			'titre' => $data->titre,
 			'id_utilisateur' => $data->user()->id_utilisateur
 		]);
 
 		$user->update(['id_profil' => $profil->id_profil]);
 
-		$profil->update(['resume' => $data->resume]);
+		$profil->update(['resume' => $data->resume, 'titre' => $data->titre]);
 
-		$profil->experienceProfessionnelles()->delete();
 		$profil->competences()->delete();
+		$profil->experienceProfessionnelles()->delete();
 
 		$this->addCompetences($data, $profil);
 		$this->addExperiences($data, $profil);
@@ -32,13 +33,14 @@ class GestionProfil
 		return response()->json([
 			'status' => true,
 			'id' => $profil->id_profil,
+			'profil' => $profil->with('competences')->with('experienceProfessionnelles')->find($profil->id_profil),
 			'message' => trans("Profil créé avec succès")
 		]);
 	}
 
 	public function addCompetences($data, $profil)
 	{
-		if ($data->has('competences')) {
+		if ($data->has('competences') AND is_array($data->competences)) {
 
 			foreach ($data->competences as $key => $competence) {
 				Competence::firstOrCreate([
@@ -53,9 +55,15 @@ class GestionProfil
 
 	public function addExperiences($data, $profil)
 	{
-		if ($data->has('experiences')) {
+		if ($data->has('experiences') AND is_array($data->experiences)) {
 
 			foreach ($data->experiences as $key => $experience) {
+
+				if (!isset($experience['dateDebut'])) continue;
+				if (!isset($experience['dateFin'])) continue;
+				if (!isset($experience['entreprise'])) continue;
+				if (!isset($experience['poste'])) continue;
+				if (!isset($experience['description'])) continue;
 
 				$exp = ExperienceProfessionnelle::firstOrCreate([
 					'entreprise' => $experience['entreprise'],
@@ -64,11 +72,9 @@ class GestionProfil
 					'date_fin' => $experience['dateFin'],
 					'description' => $experience['description'],
 					'id_profil' => $profil->id_profil,
-					//'id_type_contrat' => $data->type_contrat
 				]);
 			}
-		}
-				
+		}	
 	}
 
 	public function update($data, $id)

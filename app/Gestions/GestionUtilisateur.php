@@ -129,6 +129,7 @@ class GestionUtilisateur
 			'nom' => $data->nom,
 			'prenom' => $data->prenom,
 			'email' => $data->email,
+			'sexe' => $data->sexe,
 			'telephone' => $data->telephone,
 			'date_de_modification' => now(),
 		]);
