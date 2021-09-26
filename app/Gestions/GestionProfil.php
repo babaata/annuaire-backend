@@ -56,6 +56,7 @@ class GestionProfil
 		if ($data->has('experiences')) {
 
 			foreach ($data->experiences as $key => $experience) {
+				if (isset($experience['dateDebut']) OR !isset($experience['dateFin'])) continue;
 
 				$exp = ExperienceProfessionnelle::firstOrCreate([
 					'entreprise' => $experience['entreprise'],
@@ -67,8 +68,7 @@ class GestionProfil
 					//'id_type_contrat' => $data->type_contrat
 				]);
 			}
-		}
-				
+		}	
 	}
 
 	public function update($data, $id)
