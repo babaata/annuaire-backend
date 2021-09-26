@@ -128,9 +128,10 @@ class GestionUtilisateur
 		$data->user()->update([
 			'nom' => $data->nom,
 			'prenom' => $data->prenom,
-			'email' => $data->email,
+			//'email' => $data->email,
 			'sexe' => $data->sexe,
 			'telephone' => $data->telephone,
+			'ville' => $data->has('ville') ? $data->ville:null,
 			'date_de_modification' => now(),
 		]);
 
@@ -209,17 +210,18 @@ class GestionUtilisateur
 
 	public function userPagination($data)
 	{
+
+		$size = $data->has('size') ? $data->size:15;
+
 		$users = Utilisateur::orderBy('date_de_creation', 'DESC')
 			->with('profil.competences')
 			->with('profil.experienceProfessionnelles')
 			->with('profil.educations')
-			->with('langues');
-
-		$size = $data->has('size') ? $data->size:15;
+			->with('langues')->paginate($size);
 
 		return response()->json([
             "status" => true,
-            'users' => $users->paginate($size)
+            'users' => $users
         ]);
 	}
 
