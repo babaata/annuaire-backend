@@ -253,6 +253,16 @@ class GestionUtilisateur
         ]);
 	}
 
+	public function deletePreviousImage($user)
+	{
+		$urls = explode("/", $user->url_photo);//6
+
+		if (count($urls) == 6) {
+			$path = "public/users/".$urls[5];
+			Storage::delete($path);
+		}
+	}
+
 	public function saveUserPicture($data)
 	{
 		$status = false;
@@ -260,9 +270,13 @@ class GestionUtilisateur
 		if ($status = $data->file('image')->isValid()) {
 
             //store file into users pictures folder
+            $this->deletePreviousImage($data->user());
+
             $name = (string) Str::uuid();
             $extension = $data->image->extension();
             $path = $data->image->storeAs('public/users', "$name.$extension", 'local');
+
+            optimize_image($path);
 
             $data->user()->update([
             	'url_photo' => asset(Storage::url($path))
