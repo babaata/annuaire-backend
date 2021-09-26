@@ -86,6 +86,7 @@ class Utilisateur extends Authenticatable implements JWTSubject
 		'api_token',
 		'code_sms',
 		'date_code_sms',
+		'ville',
 		'id_pays',
 		'id_profil'
 	];

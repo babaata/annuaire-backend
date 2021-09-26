@@ -31,10 +31,11 @@ class UtilisateurUpdateRequest extends FormRequest
             'nom' => 'required|max:15',
             'prenom' => 'required|max:25',
             'langues' => 'required',
+            'ville' => 'nullable|min:3',
             //'date_de_naissance' => 'nullable|date',
             'sexe' => ['required', Rule::in(['Homme', 'Femme'])],
             'telephone' => 'required|unique:utilisateur,telephone,'.$id.',id_utilisateur',
-            'email' => 'required|unique:utilisateur,email,'.$id.',id_utilisateur',
+            //'email' => 'required|unique:utilisateur,email,'.$id.',id_utilisateur',
         ];
     }
 }
