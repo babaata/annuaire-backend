@@ -32,6 +32,7 @@ class UtilisateurUpdateRequest extends FormRequest
             'prenom' => 'required|max:25',
             'langues' => 'required',
             'ville' => 'nullable|min:3',
+            'pays' => 'required',
             //'date_de_naissance' => 'nullable|date',
             'sexe' => ['required', Rule::in(['Homme', 'Femme'])],
             'telephone' => 'required|unique:utilisateur,telephone,'.$id.',id_utilisateur',

@@ -128,7 +128,7 @@ class GestionUtilisateur
 		$data->user()->update([
 			'nom' => $data->nom,
 			'prenom' => $data->prenom,
-			//'email' => $data->email,
+			'pays' => $data->has('pays') ? $data->pays:null,
 			'sexe' => $data->sexe,
 			'telephone' => $data->telephone,
 			'ville' => $data->has('ville') ? $data->ville:null,
