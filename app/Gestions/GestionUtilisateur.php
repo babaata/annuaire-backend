@@ -31,7 +31,9 @@ class GestionUtilisateur
 			->with('profil.competences')
 			->with('profil.experienceProfessionnelles')
 			->with('profil.educations')
-			->with('langues')->get()->find($data->user()->id_utilisateur);
+			->with('langues')
+			->with('pays')
+			->get()->find($data->user()->id_utilisateur);
 
 		return response()->json([
             "status" => true,
@@ -162,6 +164,7 @@ class GestionUtilisateur
 	{
 		$user = Utilisateur::whereNomUtilisateur($user)
 			->with('langues')
+			->with('pays')
 			->with(
 				'profil.competences',
 				'profil.educations',
@@ -182,6 +185,7 @@ class GestionUtilisateur
 			->with('profil.competences')
 			->with('profil.experienceProfessionnelles')
 			->with('profil.educations')
+			->with('pays')
 			->with('langues');
 
 		if ($data->has('competence')) {
@@ -217,6 +221,7 @@ class GestionUtilisateur
 			->with('profil.competences')
 			->with('profil.experienceProfessionnelles')
 			->with('profil.educations')
+			->with('pays')
 			->with('langues')->paginate($size);
 
 		return response()->json([
@@ -245,6 +250,7 @@ class GestionUtilisateur
 		->with('profil.competences')
 		->with('profil.experienceProfessionnelles')
 		->with('profil.educations')
+		->with('pays')
 		->with('langues')->get();
 
 		return response()->json([
