@@ -34,7 +34,7 @@ class GestionProfil
 			'status' => true,
 			'id' => $profil->id_profil,
 			'profil' => $profil->with('competences')->with('experienceProfessionnelles')->find($profil->id_profil),
-			'message' => trans("Profil créé avec succès")
+			'message' => trans("Modification effectuée avec succès")
 		]);
 	}
 

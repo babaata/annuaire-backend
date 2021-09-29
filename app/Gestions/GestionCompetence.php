@@ -1,19 +1,23 @@
 <?php 
 namespace App\Gestions;
-use App\Models\{Competence, ExperienceProfessionnelle, Utilisateur};
+use App\Models\{Competence, ExperienceProfessionnelle, Utilisateur, Pays};
 use DB;
 class GestionCompetence
 {
 
 	public function statistiques($data)
 	{
+		$pays = Pays::whereIn('id_pays', function ($query){
+			$query->from('utilisateur')->whereNotNull('id_pays')->select('id_pays')->get();
+		})->count();
+
 		return response()->json([
 	        'status' => true,
 	        'statistiques' => [
 	        	'competence' => Competence::count(),
 		        'utilisateur' => Utilisateur::count(),
 		        'profession' => ExperienceProfessionnelle::count(),
-		        'pays' => 1
+		        'pays' => $pays
 	        ]
 	    ]);
 	}

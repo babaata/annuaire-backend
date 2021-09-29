@@ -45,7 +45,7 @@ class GestionUtilisateur
 	{
 		$status = false;
 
-		$message = "Email invalide";
+		$message = "Code invalide";
 
 		$user = Utilisateur::whereCodeSms($data->code);
 
