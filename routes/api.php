@@ -109,3 +109,6 @@ Route::get('/statistiques', 'CompetenceController@statistiques');
 
 Route::get('/pays', 'PaysController@index');
 
+//Recherche pour autocompletion
+Route::any('/autompletion/{ressource}', 'AutoCompletionController@index');
+
