@@ -181,7 +181,9 @@ class GestionUtilisateur
 
 	public function allUsers($data)
 	{
-		$users = Utilisateur::orderBy('date_de_creation', 'DESC')
+		$users = Utilisateur::whereIn('id_utilisateur', function ($query){
+			$query->from('profil')->whereNotNull('titre')->select('id_utilisateur')->get();
+		})->orderBy('date_de_creation', 'DESC')
 			->with('profil.competences')
 			->with('profil.experienceProfessionnelles')
 			->with('profil.educations')
@@ -217,7 +219,9 @@ class GestionUtilisateur
 
 		$size = $data->has('size') ? $data->size:15;
 
-		$users = Utilisateur::orderBy('date_de_creation', 'DESC')
+		$users = Utilisateur::whereIn('id_utilisateur', function ($query){
+			$query->from('profil')->select('id_utilisateur')->get();
+		})->orderBy('date_de_creation', 'DESC')
 			->with('profil.competences')
 			->with('profil.experienceProfessionnelles')
 			->with('profil.educations')
