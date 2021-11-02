@@ -182,7 +182,7 @@ class GestionUtilisateur
 	public function allUsers($data)
 	{
 		$users = Utilisateur::whereIn('id_utilisateur', function ($query){
-			$query->from('profil')->select('id_utilisateur')->get();
+			$query->from('profil')->whereNotNull('titre')->select('id_utilisateur')->get();
 		})->orderBy('date_de_creation', 'DESC')
 			->with('profil.competences')
 			->with('profil.experienceProfessionnelles')
