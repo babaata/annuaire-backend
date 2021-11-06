@@ -26,7 +26,7 @@ class UtilisateurCreateRequest extends FormRequest
         return [
             'nom' => 'required|string|max:100|min:3',
             'prenom' => 'required|string|max:100|min:3',
-            'telephone' => 'required|unique:utilisateur',
+            'telephone' => 'required|numeric|unique:utilisateur',
             'email' => 'required|email|unique:utilisateur',
             'password' => 'required|min:6',
         ];

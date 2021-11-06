@@ -24,13 +24,11 @@ class GestionCompetence
 
 	public function extrais($data)
 	{
-		$competences = Competence::whereIn('id_profil', function ($query) {
-	        $query->from('profil')->whereIn('id_utilisateur', function ($query){
-	        	$query->from('utilisateur')
-	        	->orderBy('date_de_creation', 'DESC')
-	        	->select('id_utilisateur')->get();
-	        })->select('id_profil')->get();
-	    })->groupBy('nom')->limit(8)->get();
+	    $competences = Profil::whereIn('id_utilisateur', function ($query){
+	       	$query->from('utilisateur')
+	        ->orderBy('date_de_creation', 'DESC')
+	        ->select('id_utilisateur')->get();
+	    })->groupBy('titre')->limit(8)->get();
 
 	    return response()->json([
 	        'status' => true,
