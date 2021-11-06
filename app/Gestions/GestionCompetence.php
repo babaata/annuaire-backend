@@ -1,6 +1,6 @@
 <?php 
 namespace App\Gestions;
-use App\Models\{Competence, ExperienceProfessionnelle, Utilisateur, Pays};
+use App\Models\{Competence, ExperienceProfessionnelle, Utilisateur, Pays, Profil};
 use DB;
 class GestionCompetence
 {
