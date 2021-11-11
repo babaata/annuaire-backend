@@ -1,12 +1,12 @@
 FROM php:7.4-fpm
- 
-# Copy composer.lock and composer.json into the working directory
-COPY composer.lock composer.json /var/www/html/
- 
+
+# Copy composer.lock and composer.json
+COPY composer.lock composer.json /var/www/
+
 # Set working directory
-WORKDIR /var/www/html/
- 
-# Install dependencies for the operating system software
+WORKDIR /var/www
+
+# Install dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpng-dev \
@@ -21,37 +21,32 @@ RUN apt-get update && apt-get install -y \
     git \
     libonig-dev \
     curl --fix-missing
- 
+
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
- 
-# Install extensions for php
+
+# Install extensions
 RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
 RUN docker-php-ext-install gd
- 
-# Install composer (php package manager)
+
+# Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
- 
-# Copy existing application directory contents to the working directory
-COPY . /var/www/html
+#RUN composer update && composer update
 
-RUN composer install
-RUN composer dump-autoload
+# Add user for laravel application
+RUN groupadd -g 1000 www
+RUN useradd -u 1000 -ms /bin/bash -g www www
 
-RUN php artisan key:generate
-RUN php artisan route:cache
-RUN php artisan optimize
-RUN php artisan config:cache
-RUN php artisan view:cache
-RUN php artisan view:clear
-# RUN php artisan jwt:secret
- 
-# Assign permissions of the working directory to the www-data user
-RUN chown -R www-data:www-data \
-        /var/www/html/storage \
-        /var/www/html/bootstrap/cache
- 
-# Expose port 9000 and start php-fpm server (for FastCGI Process Manager)
+# Copy existing application directory contents
+COPY . /var/www
+
+# Copy existing application directory permissions
+COPY --chown=www:www . /var/www
+
+# Change current user to www
+USER www
+
+# Expose port 9000 and start php-fpm server
 EXPOSE 9000
 CMD ["php-fpm"]

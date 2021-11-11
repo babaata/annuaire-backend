@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
 
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
 
-        DB::table('utilisateur')->where('nom', 'LIKE', "%test%")
-        ->orWhere('prenom', 'LIKE', "%test%")->delete();
+        // DB::table('utilisateur')->where('nom', 'LIKE', "%test%")
+        // ->orWhere('prenom', 'LIKE', "%test%")->delete();
     }
 }
