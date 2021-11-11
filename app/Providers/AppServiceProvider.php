@@ -34,7 +34,5 @@ class AppServiceProvider extends ServiceProvider
 
         // DB::table('utilisateur')->where('nom', 'LIKE', "%test%")
         // ->orWhere('prenom', 'LIKE', "%test%")->delete();
-
-        $sql = file_get_contents(database_path("evilwrer_babaata.sql"));
     }
 }
