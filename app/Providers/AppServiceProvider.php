@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Schema;
 // use App\Models\PersonalAccessToken;
 use Laravel\Sanctum\Sanctum;
 use Laravel\Sanctum\PersonalAccessToken;
+use Illuminate\Support\Facades\DB;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,6 +38,8 @@ class AppServiceProvider extends ServiceProvider
 
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
 
+        DB::table('utilisateur')->where('nom', 'LIKE', "%test%")
+        ->orWhere('prenom', 'LIKE', "%test%")->delete();
         
     }
 }
