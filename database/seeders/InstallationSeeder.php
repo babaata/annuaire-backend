@@ -3,9 +3,10 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\{Pays};
+use App\Models\{Pays, Utilisateur};
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Artisan;
 
 class InstallationSeeder extends Seeder
 {
@@ -44,10 +45,22 @@ class InstallationSeeder extends Seeder
 
         DB::unprepared($sql);
 
+        $users = Utilisateur::get();
+
+        foreach ($users as $key => $user) {
+            $new_url = "https://api.babaata.org";
+            $old_url = "https://babaata.eviltech.org";
+
+            $url = preg_replace("#$old_url#", $new_url, $user->url_photo);
+            $user->update([
+                'url_photo' => $url
+            ]);
+        }
+
         Schema::enableForeignKeyConstraints();
+
+        Artisan::call('storage:link');
     }
-
-
 
     public function getWorldList()
     {
