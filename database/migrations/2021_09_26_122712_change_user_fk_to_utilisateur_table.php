@@ -27,7 +27,9 @@ class ChangeUserFkToUtilisateurTable extends Migration
     public function down()
     {
         Schema::table('utilisateur', function (Blueprint $table) {
-            create_fk($table, "profil", true);
+            if (!Schema::hasColumn('utilisateur', 'id_profil')) {
+                create_fk($table, "profil", true);
+            }
         });
     }
 }

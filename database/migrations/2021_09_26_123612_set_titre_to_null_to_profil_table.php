@@ -14,7 +14,7 @@ class SetTitreToNullToProfilTable extends Migration
     public function up()
     {
         Schema::table('profil', function (Blueprint $table) {
-            $table->string('titre')->nullable()->change();
+            //$table->string('titre')->nullable()->change();
         });
     }
 
@@ -26,7 +26,7 @@ class SetTitreToNullToProfilTable extends Migration
     public function down()
     {
         Schema::table('profil', function (Blueprint $table) {
-            $table->string('titre')->change();
+            //$table->string('titre')->change();
         });
     }
 }

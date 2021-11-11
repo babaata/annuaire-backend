@@ -14,8 +14,8 @@ class SetIdTyContratToNullToEpTable extends Migration
     public function up()
     {
         Schema::table('experience_professionnelle', function (Blueprint $table) {
-            $table->dropForeign(['id_type_contrat']);
-            $table->dropColumn(['id_type_contrat']);
+            //$table->dropForeign(['id_type_contrat']);
+            //$table->dropColumn(['id_type_contrat']);
         });
     }
 
@@ -27,8 +27,8 @@ class SetIdTyContratToNullToEpTable extends Migration
     public function down()
     {
         Schema::table('experience_professionnelle', function (Blueprint $table) {
-            create_fk($table, "type_contrat", true);
-            $table->string('id_type_contrat');
+            //create_fk($table, "type_contrat", true);
+            //$table->string('id_type_contrat');
         });
     }
 }
