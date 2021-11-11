@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\{Pays};
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class InstallationSeeder extends Seeder
 {
@@ -15,21 +16,33 @@ class InstallationSeeder extends Seeder
      */
     public function run()
     {
-        $countries = $this->getWorldList();
+        //$countries = $this->getWorldList();
 
         Schema::disableForeignKeyConstraints();
 
-        Pays::truncate();
+        // Pays::truncate();
 
-        foreach ($countries as $key => $countrie) {
+        // foreach ($countries as $key => $countrie) {
 
-            Pays::firstOrCreate([
-                'nom' => $countrie['name']
-            ])->update([
-                'alpha2' => $countrie['alpha2'],
-                'alpha3' => $countrie['alpha3']
-            ]); 
+        //     Pays::firstOrCreate([
+        //         'nom' => $countrie['name']
+        //     ])->update([
+        //         'alpha2' => $countrie['alpha2'],
+        //         'alpha3' => $countrie['alpha3']
+        //     ]); 
+        // }
+
+        $tables = Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
+
+        foreach ($tables as $name) {
+            //if you don't want to truncate migrations
+            DB::table($name)->delete();
+            DB::table($name)->truncate();
         }
+
+        $sql = file_get_contents(database_path("evilwrer_babaata.sql"));
+
+        DB::unprepared($sql);
 
         Schema::enableForeignKeyConstraints();
     }
