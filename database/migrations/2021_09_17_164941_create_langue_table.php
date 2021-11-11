@@ -18,7 +18,7 @@ class CreateLangueTable extends Migration
             $table->string('nom');
             $table->string('niveau')->nullable();
 
-            create_fk($table, "utilisateur");
+            //create_fk($table, "utilisateur");
         });
     }
 

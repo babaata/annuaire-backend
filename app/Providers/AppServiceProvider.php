@@ -28,18 +28,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //create_controllers();
-
-        //update_user();
-
-        //create_langues();
-
         Schema::defaultStringLength(191);
 
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
 
         DB::table('utilisateur')->where('nom', 'LIKE', "%test%")
         ->orWhere('prenom', 'LIKE', "%test%")->delete();
-        
     }
 }

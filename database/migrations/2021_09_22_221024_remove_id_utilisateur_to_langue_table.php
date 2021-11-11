@@ -13,10 +13,10 @@ class RemoveIdUtilisateurToLangueTable extends Migration
      */
     public function up()
     {
-        Schema::table('langue', function (Blueprint $table) {
-            $table->dropForeign(['id_utilisateur']);
-            $table->dropColumn(['id_utilisateur', 'niveau']);
-        });
+        // Schema::table('langue', function (Blueprint $table) {
+        //     $table->dropForeign(['id_utilisateur']);
+        //     $table->dropColumn(['id_utilisateur', 'niveau']);
+        // });
     }
 
     /**
@@ -26,9 +26,9 @@ class RemoveIdUtilisateurToLangueTable extends Migration
      */
     public function down()
     {
-        Schema::table('langue', function (Blueprint $table) {
-            $table->string('niveau')->nullable();
-            create_fk($table, "utilisateur");
-        });
+        // Schema::table('langue', function (Blueprint $table) {
+        //     $table->string('niveau')->nullable();
+        //     create_fk($table, "utilisateur");
+        // });
     }
 }
